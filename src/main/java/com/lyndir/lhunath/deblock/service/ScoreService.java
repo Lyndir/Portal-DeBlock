@@ -51,21 +51,21 @@ public class ScoreService {
     }
 
     /**
-     * Add a new score value to the given user's profile.
+     * Add a new score value to the given player's profile.
      * 
      * @param score
      *            The score value that was achieved.
      * @param date
-     *            The date that the user achieved the given score.
+     *            The date that the player achieved the given score.
      * 
-     * @return The {@link ScoreEntity} that records the given score for the given user.
+     * @return The {@link ScoreEntity} that records the given score for the given player.
      */
     public ScoreEntity addScore(Integer score, Date date) {
 
         if (score == null)
-            throw logger.err( "No score specified to add to user." ).toError( IllegalArgumentException.class );
+            throw logger.err( "No score specified to add to player." ).toError( IllegalArgumentException.class );
         if (date == null)
-            throw logger.err( "No date specified or score to add to user." ).toError( IllegalArgumentException.class );
+            throw logger.err( "No date specified or score to add to player." ).toError( IllegalArgumentException.class );
         if (date.after( new Date() ))
             throw logger.err( "Can't add scores achieved in the future." ).toError( IllegalArgumentException.class );
 

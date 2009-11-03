@@ -15,8 +15,8 @@
  */
 package com.lyndir.lhunath.deblock.entity;
 
-import static com.lyndir.lhunath.deblock.entity.UserEntity.findAll;
-import static com.lyndir.lhunath.deblock.entity.UserEntity.findByUserName;
+import static com.lyndir.lhunath.deblock.entity.PlayerEntity.findAll;
+import static com.lyndir.lhunath.deblock.entity.PlayerEntity.findByName;
 
 import java.util.Date;
 import java.util.SortedSet;
@@ -38,7 +38,7 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
 /**
- * <h2>{@link UserEntity}<br>
+ * <h2>{@link PlayerEntity}<br>
  * <sub>[in short] (TODO).</sub></h2>
  * 
  * <p>
@@ -52,21 +52,21 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  * @author lhunath
  */
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userName" }) })
-@NamedQueries( { @NamedQuery(name = findAll, query = "SELECT u FROM UserEntity u"),
-                @NamedQuery(name = findByUserName, query = "SELECT u FROM UserEntity u WHERE u.userName = :userName") })
-public class UserEntity implements Comparable<UserEntity> {
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
+@NamedQueries( { @NamedQuery(name = findAll, query = "SELECT p FROM PlayerEntity p"),
+                @NamedQuery(name = findByName, query = "SELECT p FROM PlayerEntity p WHERE p.name = :name") })
+public class PlayerEntity implements Comparable<PlayerEntity> {
 
-    private static final Logger    logger         = Logger.get( UserEntity.class );
+    private static final Logger    logger     = Logger.get( PlayerEntity.class );
 
-    public static final String     findAll        = "UserEntity.findAll";
-    public static final String     findByUserName = "UserEntity.findByUserName";
+    public static final String     findAll    = "PlayerEntity.findAll";
+    public static final String     findByName = "PlayerEntity.findByName";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key                    id;
 
-    private String                 userName;
+    private String                 name;
     private String                 password;
 
     private Date                   registered;
@@ -75,18 +75,18 @@ public class UserEntity implements Comparable<UserEntity> {
     private SortedSet<ScoreEntity> scores;
 
 
-    public UserEntity() {
+    public PlayerEntity() {
 
     }
 
-    public UserEntity(String userName, String password) {
+    public PlayerEntity(String name, String password) {
 
-        if (userName == null || userName.isEmpty())
-            throw logger.bug( "Username can't be empty." ).toError( IllegalArgumentException.class );
+        if (name == null || name.isEmpty())
+            throw logger.bug( "Player name can't be empty." ).toError( IllegalArgumentException.class );
         if (password == null || password.isEmpty())
             throw logger.bug( "Password can't be empty." ).toError( IllegalArgumentException.class );
 
-        this.userName = userName;
+        this.name = name;
         this.password = password;
 
         registered = new Date();
@@ -94,7 +94,7 @@ public class UserEntity implements Comparable<UserEntity> {
     }
 
     /**
-     * @return The id of this {@link UserEntity}.
+     * @return The id of this {@link PlayerEntity}.
      */
     public Key getId() {
 
@@ -103,7 +103,7 @@ public class UserEntity implements Comparable<UserEntity> {
 
     /**
      * @param id
-     *            The id of this {@link UserEntity}.
+     *            The id of this {@link PlayerEntity}.
      */
     public void setId(Key id) {
 
@@ -111,24 +111,24 @@ public class UserEntity implements Comparable<UserEntity> {
     }
 
     /**
-     * @return The userName of this {@link UserEntity}.
+     * @return The name of this {@link PlayerEntity}.
      */
-    public String getUserName() {
+    public String getName() {
 
-        return userName;
+        return name;
     }
 
     /**
-     * @param userName
-     *            The userName of this {@link UserEntity}.
+     * @param name
+     *            The name of this {@link PlayerEntity}.
      */
-    public void setUserName(String userName) {
+    public void setName(String name) {
 
-        this.userName = userName;
+        this.name = name;
     }
 
     /**
-     * @return The password of this {@link UserEntity}.
+     * @return The password of this {@link PlayerEntity}.
      */
     public String getPassword() {
 
@@ -137,7 +137,7 @@ public class UserEntity implements Comparable<UserEntity> {
 
     /**
      * @param password
-     *            The password of this {@link UserEntity}.
+     *            The password of this {@link PlayerEntity}.
      */
     public void setPassword(String password) {
 
@@ -145,7 +145,7 @@ public class UserEntity implements Comparable<UserEntity> {
     }
 
     /**
-     * @return The registered of this {@link UserEntity}.
+     * @return The registered of this {@link PlayerEntity}.
      */
     public Date getRegistered() {
 
@@ -154,7 +154,7 @@ public class UserEntity implements Comparable<UserEntity> {
 
     /**
      * @param registered
-     *            The registered of this {@link UserEntity}.
+     *            The registered of this {@link PlayerEntity}.
      */
     public void setRegistered(Date registered) {
 
@@ -162,7 +162,7 @@ public class UserEntity implements Comparable<UserEntity> {
     }
 
     /**
-     * @return The scores of this {@link UserEntity}.
+     * @return The scores of this {@link PlayerEntity}.
      */
     public SortedSet<ScoreEntity> getScores() {
 
@@ -171,7 +171,7 @@ public class UserEntity implements Comparable<UserEntity> {
 
     /**
      * @param scores
-     *            The scores of this {@link UserEntity}.
+     *            The scores of this {@link PlayerEntity}.
      */
     public void setScores(SortedSet<ScoreEntity> scores) {
 
@@ -181,7 +181,7 @@ public class UserEntity implements Comparable<UserEntity> {
     /**
      * {@inheritDoc}
      */
-    public int compareTo(UserEntity o) {
+    public int compareTo(PlayerEntity o) {
 
         return registered.compareTo( o.registered );
     }

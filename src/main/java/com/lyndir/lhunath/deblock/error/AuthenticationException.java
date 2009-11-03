@@ -31,7 +31,7 @@ package com.lyndir.lhunath.deblock.error;
  */
 public class AuthenticationException extends Exception {
 
-    private String userName;
+    private String name;
     private String password;
 
 
@@ -42,25 +42,25 @@ public class AuthenticationException extends Exception {
      *            The problem description.
      * @param cause
      *            The exception that caused this problem. (optional)
-     * @param userName
-     *            The userName of the user that was trying to authenticate.
+     * @param name
+     *            The name of the player that was trying to authenticate.
      * @param password
-     *            The password that the user was trying to authenticate with.
+     *            The password that the player was trying to authenticate with.
      */
-    public AuthenticationException(String message, Throwable cause, String userName, String password) {
+    public AuthenticationException(String message, Throwable cause, String name, String password) {
 
         super( message, cause );
 
-        this.userName = userName;
+        this.name = name;
         this.password = password;
     }
 
     /**
-     * @return The userName of this {@link AuthenticationException}.
+     * @return The name of this {@link AuthenticationException}.
      */
-    public String getUserName() {
+    public String getName() {
 
-        return userName;
+        return name;
     }
 
     /**

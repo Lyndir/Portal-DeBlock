@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.util.JSONBuilder;
 
+import com.lyndir.lhunath.deblock.entity.PlayerEntity;
 import com.lyndir.lhunath.deblock.entity.ScoreEntity;
-import com.lyndir.lhunath.deblock.entity.UserEntity;
 import com.lyndir.lhunath.deblock.entity.util.EMF;
+import com.lyndir.lhunath.deblock.service.PlayerService;
 import com.lyndir.lhunath.deblock.service.ScoreService;
-import com.lyndir.lhunath.deblock.service.UserService;
 import com.lyndir.lhunath.deblock.util.CheckUtil;
 import com.lyndir.lhunath.lib.system.Utils;
 import com.lyndir.lhunath.lib.system.logging.Logger;
@@ -75,20 +75,20 @@ public class ScoreServlet extends HttpServlet {
 
                 // Record the new score.
                 ScoreEntity newScoreEntity = ScoreService.get().addScore( score, date );
-                UserEntity userEntity = UserService.get().getUser( name, pass );
-                userEntity.getScores().add( newScoreEntity );
+                PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
+                playerEntity.getScores().add( newScoreEntity );
 
-                // Save user (and scores).
+                // Save player (and scores).
                 EMF.getEm().getTransaction().begin();
-                EMF.getEm().persist( userEntity );
+                EMF.getEm().persist( playerEntity );
                 EMF.getEm().flush();
                 EMF.getEm().getTransaction().commit();
             }
 
             // Output all known scores.
             JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
-            for (UserEntity userEntity : UserService.get().getAllUsers())
-                json.key( userEntity.getUserName() ).value( userEntity.getScores().last().getScore() );
+            for (PlayerEntity playerEntity : PlayerService.get().getAllPlayers())
+                json.key( playerEntity.getName() ).value( playerEntity.getScores().last().getScore() );
             json.endObject();
 
             // Finished successfully.
