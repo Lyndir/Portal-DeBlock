@@ -6,3 +6,4 @@
 /.settings
 /eclipse
 /target
+/src/main/resources/deblock.xml
