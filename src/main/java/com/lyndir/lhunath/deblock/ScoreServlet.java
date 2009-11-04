@@ -87,8 +87,16 @@ public class ScoreServlet extends HttpServlet {
 
             // Output all known scores.
             JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
-            for (PlayerEntity playerEntity : PlayerService.get().getAllPlayers())
-                json.key( playerEntity.getName() ).value( playerEntity.getScores().last().getScore() );
+            for (PlayerEntity playerEntity : PlayerService.get().getAllPlayers()) {
+                ScoreEntity lastScoreEntity = playerEntity.getScores().last();
+                json.key( playerEntity.getName() );
+
+                json.object();
+                String achievedDate = Float.toString( lastScoreEntity.getAchievedDate().getTime() / 1000.0f );
+                json.key( achievedDate );
+                json.value( lastScoreEntity.getScore() );
+                json.endObject();
+            }
             json.endObject();
 
             // Finished successfully.
