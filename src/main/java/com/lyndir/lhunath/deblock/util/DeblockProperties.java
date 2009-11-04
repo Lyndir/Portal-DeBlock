@@ -38,12 +38,14 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  */
 public class DeblockProperties {
 
-    private static final DeblockProperties instance      = new DeblockProperties();
-    private static final Logger            logger        = Logger.get( DeblockProperties.class );
+    private static final DeblockProperties instance       = new DeblockProperties();
+    private static final Logger            logger         = Logger.get( DeblockProperties.class );
 
-    private static final String            SALT_PROPERTY = "salt";
+    private static final String            SALT_PROPERTY  = "salt";
+    private static final String            BOT_SCORE_GAIN = "botScoreGain";
+    private static final String            BOT_LUCK_GAIN  = "botLuckGain";
 
-    private Properties                     properties    = new Properties();
+    private Properties                     properties     = new Properties();
 
 
     public static DeblockProperties get() {
@@ -74,8 +76,48 @@ public class DeblockProperties {
         return value;
     }
 
+    /**
+     * @return The secret salt for score submission checksums.
+     */
     public String getSalt() {
 
         return getProperty( SALT_PROPERTY );
+    }
+
+    /**
+     * The score gain is defined as follows:
+     * 
+     * <p>
+     * <i>The fraction of the bot's experience (days since registration) that boost the bot's maximum score for the day
+     * by his base score.</i>
+     * </p>
+     * 
+     * <p>
+     * Thus, a score gain of <code>0.5</code> means that a bot with a base score of <code>100</code> that has been
+     * playing for <code>10</code> days can end his day with a score of
+     * <code>100 + 10 * 0.5 * 100 = 100 + 500 = 600</code>, while a bot with a base score of <code>500</code> that has
+     * been playing for <code>62</code> days (two months) can end his day with a score of
+     * <code>500 + 62 * 0.5 * 500 = 500 + 15500 = 16000</code>.
+     * </p>
+     * 
+     * @return The amount of score bots gain per day.
+     */
+    public float getBotScoreGain() {
+
+        return Float.parseFloat( getProperty( BOT_SCORE_GAIN ) );
+    }
+
+    /**
+     * The luck gain is defined as follows:
+     * 
+     * <p>
+     * <i>The amount with which to multiply the score gain of a bot when he has a lucky day.</i>
+     * </p>
+     * 
+     * @return The multiplier that is applied to a lucky bot's score gain.
+     */
+    public float getBotLuckGain() {
+
+        return Float.parseFloat( getProperty( BOT_LUCK_GAIN ) );
     }
 }

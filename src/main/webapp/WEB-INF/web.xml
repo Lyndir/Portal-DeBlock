@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://java.sun.com/xml/ns/javaee"
-xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <!--  JSON Score Servlet -->
 	<servlet>
-		<servlet-name>Score</servlet-name>
+		<servlet-name>JSONScoreServlet</servlet-name>
 		<servlet-class>com.lyndir.lhunath.deblock.ScoreServlet</servlet-class>
 	</servlet>
-    
+    <!--  JSON Score Servlet -->
+    <servlet>
+        <servlet-name>cron.BotsServlet</servlet-name>
+        <servlet-class>com.lyndir.lhunath.deblock.cron.BotsServlet</servlet-class>
+    </servlet>
+
+    <!-- Servlet Mappings -->
     <servlet-mapping>
-		<servlet-name>Score</servlet-name>
+		<servlet-name>JSONScoreServlet</servlet-name>
 		<url-pattern>/scores.json</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>cron.BotsServlet</servlet-name>
+        <url-pattern>/bots.cron</url-pattern>
+    </servlet-mapping>
 
+    <!-- Default Configuration -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
+    <!-- Security Configuration -->
     <security-constraint>
         <web-resource-collection>
             <url-pattern>/scores.json</url-pattern>
@@ -27,5 +41,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/*.cron</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
 
 </web-app>

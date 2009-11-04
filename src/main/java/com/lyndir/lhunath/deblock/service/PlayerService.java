@@ -17,9 +17,11 @@ package com.lyndir.lhunath.deblock.service;
 
 import java.util.List;
 
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.lyndir.lhunath.deblock.entity.BotEntity;
 import com.lyndir.lhunath.deblock.entity.PlayerEntity;
 import com.lyndir.lhunath.deblock.entity.util.EMF;
 import com.lyndir.lhunath.deblock.error.AuthenticationException;
@@ -112,5 +114,70 @@ public class PlayerService {
             .toError( AuthenticationException.class, name, password );
 
         return playerEntity;
+    }
+
+    /**
+     * Look up the {@link BotEntity} with the given name.
+     * 
+     * <p>
+     * If no {@link BotEntity} exists yet for the given name, a new {@link BotEntity} is registered.
+     * </p>
+     * 
+     * @param name
+     *            The name or alias of the bot.
+     * 
+     * @return The {@link BotEntity} with the given name.
+     */
+    public BotEntity getBot(String name) {
+
+        Query botQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
+        botQuery.setParameter( "name", name );
+        BotEntity botEntity = null;
+        try {
+            botEntity = (BotEntity) botQuery.getSingleResult();
+        } catch (NoResultException e) {}
+
+        // Check if the player is already registered. If not, just register him now with the given name and password.
+        if (botEntity == null)
+            botEntity = new BotEntity( name );
+
+        return botEntity;
+    }
+
+    /**
+     * Persist the given player and record his updated data (such as scores).
+     * 
+     * @param playerEntity
+     *            The player whose updated data needs to be saved.
+     * 
+     * @return <code>true</code> if the player's data was successfully saved.<br>
+     *         <code>false</code> if something happened made it impossible to save the player's data.
+     */
+    public boolean save(PlayerEntity playerEntity) {
+
+        EntityTransaction transaction = EMF.getEm().getTransaction();
+        try {
+            transaction.begin();
+            logger.inf( "Transaction started" );
+            EMF.getEm().persist( playerEntity );
+            EMF.getEm().flush();
+            transaction.commit();
+            logger.inf( "Transaction committed" );
+        }
+
+        catch (Throwable e) {
+            logger.err( e, "unexpected" );
+        }
+
+        finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+                logger.inf( "Transaction rolled back" );
+                return false;
+            }
+        }
+
+        logger.inf( "saved successfully" );
+        return true;
     }
 }

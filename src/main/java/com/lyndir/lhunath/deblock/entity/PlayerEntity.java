@@ -71,26 +71,22 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
 
     private Date                   registered;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
+    @OneToMany(cascade = { CascadeType.ALL })
     private SortedSet<ScoreEntity> scores;
 
 
     public PlayerEntity() {
 
+        setRegistered( new Date() );
+        setScores( new TreeSet<ScoreEntity>() );
     }
 
     public PlayerEntity(String name, String password) {
 
-        if (name == null || name.isEmpty())
-            throw logger.bug( "Player name can't be empty." ).toError( IllegalArgumentException.class );
-        if (password == null || password.isEmpty())
-            throw logger.bug( "Password can't be empty." ).toError( IllegalArgumentException.class );
+        this();
 
-        this.name = name;
-        this.password = password;
-
-        registered = new Date();
-        scores = new TreeSet<ScoreEntity>();
+        setName( name );
+        setPassword( password );
     }
 
     /**
@@ -124,6 +120,9 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
      */
     public void setName(String name) {
 
+        if (name == null || name.isEmpty())
+            throw logger.bug( "Player name can't be empty." ).toError( IllegalArgumentException.class );
+
         this.name = name;
     }
 
@@ -140,6 +139,9 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
      *            The password of this {@link PlayerEntity}.
      */
     public void setPassword(String password) {
+
+        if (password == null || password.isEmpty())
+            throw logger.bug( "Password can't be empty." ).toError( IllegalArgumentException.class );
 
         this.password = password;
     }
