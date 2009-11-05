@@ -38,14 +38,19 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  */
 public class DeblockProperties {
 
-    private static final DeblockProperties instance       = new DeblockProperties();
-    private static final Logger            logger         = Logger.get( DeblockProperties.class );
+    private static final Logger            logger                     = Logger.get( DeblockProperties.class );
 
-    private static final String            SALT_PROPERTY  = "salt";
-    private static final String            BOT_SCORE_GAIN = "botScoreGain";
-    private static final String            BOT_LUCK_GAIN  = "botLuckGain";
+    private static final String            CONFIG_PROPERTIES_RESOURCE = "deblock-config.xml";
+    private static final String            SECRET_PROPERTIES_RESOURCE = "deblock-secret.xml";
 
-    private Properties                     properties     = new Properties();
+    private static final String            BOT_SCORE_GAIN             = "botScoreGain";
+    private static final String            BOT_LUCK_GAIN              = "botLuckGain";
+
+    private static final String            SALT_PROPERTY              = "salt";
+
+    private static final DeblockProperties instance                   = new DeblockProperties();
+
+    private Properties                     properties                 = new Properties();
 
 
     public static DeblockProperties get() {
@@ -57,7 +62,8 @@ public class DeblockProperties {
 
         try {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            properties.loadFromXML( contextClassLoader.getResourceAsStream( "deblock.xml" ) );
+            properties.loadFromXML( contextClassLoader.getResourceAsStream( CONFIG_PROPERTIES_RESOURCE ) );
+            properties.loadFromXML( contextClassLoader.getResourceAsStream( SECRET_PROPERTIES_RESOURCE ) );
         }
 
         catch (InvalidPropertiesFormatException e) {

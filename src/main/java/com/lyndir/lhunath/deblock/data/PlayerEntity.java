@@ -13,10 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.lyndir.lhunath.deblock.entity;
+package com.lyndir.lhunath.deblock.data;
 
-import static com.lyndir.lhunath.deblock.entity.PlayerEntity.findAll;
-import static com.lyndir.lhunath.deblock.entity.PlayerEntity.findByName;
+import static com.lyndir.lhunath.deblock.data.PlayerEntity.findAll;
+import static com.lyndir.lhunath.deblock.data.PlayerEntity.findByName;
 
 import java.util.Date;
 import java.util.SortedSet;
@@ -71,7 +71,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
 
     private Date                   registered;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "player", cascade = { CascadeType.ALL })
     private SortedSet<ScoreEntity> scores;
 
 
@@ -79,6 +79,13 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
 
         setRegistered( new Date() );
         setScores( new TreeSet<ScoreEntity>() );
+    }
+
+    public PlayerEntity(String name) {
+
+        this();
+
+        setName( name );
     }
 
     public PlayerEntity(String name, String password) {

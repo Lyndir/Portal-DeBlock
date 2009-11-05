@@ -24,10 +24,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lyndir.lhunath.deblock.Bot;
-import com.lyndir.lhunath.deblock.entity.BotEntity;
-import com.lyndir.lhunath.deblock.entity.ScoreEntity;
-import com.lyndir.lhunath.deblock.entity.util.EMF;
+import com.lyndir.lhunath.deblock.data.Bot;
+import com.lyndir.lhunath.deblock.data.PlayerEntity;
+import com.lyndir.lhunath.deblock.data.ScoreEntity;
+import com.lyndir.lhunath.deblock.data.util.EMF;
 import com.lyndir.lhunath.deblock.service.PlayerService;
 import com.lyndir.lhunath.deblock.service.ScoreService;
 import com.lyndir.lhunath.deblock.util.DeblockProperties;
@@ -82,7 +82,7 @@ public class BotsServlet extends HttpServlet {
 
         long currentTimeMillis = System.currentTimeMillis();
         long dayTimeMillis = 1000 /* ms */* 3600 /* s */* 24 /* h */;
-        BotEntity botEntity = PlayerService.get().getBot( bot.getName() );
+        PlayerEntity botEntity = PlayerService.get().getBot( bot.getName() );
 
         // Determine the bot's newly achieved score based on his base score, luck and experience.
         float registeredDays = (currentTimeMillis - botEntity.getRegistered().getTime()) / dayTimeMillis;
@@ -93,7 +93,7 @@ public class BotsServlet extends HttpServlet {
 
         // Record a new score for the bot achieved at the random time span since now.
         Date achievedDate = new Date( (long) (currentTimeMillis - random.nextFloat() * dayTimeMillis) );
-        ScoreEntity newScoreEntity = ScoreService.get().addScore( newScore, achievedDate );
+        ScoreEntity newScoreEntity = ScoreService.get().addScore( botEntity, newScore, achievedDate );
         botEntity.getScores().add( newScoreEntity );
 
         // Save player (and scores).

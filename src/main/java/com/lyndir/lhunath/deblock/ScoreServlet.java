@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.util.JSONBuilder;
 
-import com.lyndir.lhunath.deblock.entity.PlayerEntity;
-import com.lyndir.lhunath.deblock.entity.ScoreEntity;
-import com.lyndir.lhunath.deblock.entity.util.EMF;
+import com.lyndir.lhunath.deblock.data.PlayerEntity;
+import com.lyndir.lhunath.deblock.data.ScoreEntity;
+import com.lyndir.lhunath.deblock.data.util.EMF;
 import com.lyndir.lhunath.deblock.error.AuthenticationException;
 import com.lyndir.lhunath.deblock.service.PlayerService;
 import com.lyndir.lhunath.deblock.service.ScoreService;
@@ -125,8 +125,8 @@ public class ScoreServlet extends HttpServlet {
             }
 
             // Record the new score.
-            ScoreEntity newScoreEntity = ScoreService.get().addScore( score, date );
             PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
+            ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
             playerEntity.getScores().add( newScoreEntity );
 
             // Save player (and scores).

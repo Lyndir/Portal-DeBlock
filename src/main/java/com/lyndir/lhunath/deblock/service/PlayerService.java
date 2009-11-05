@@ -21,9 +21,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import com.lyndir.lhunath.deblock.entity.BotEntity;
-import com.lyndir.lhunath.deblock.entity.PlayerEntity;
-import com.lyndir.lhunath.deblock.entity.util.EMF;
+import com.lyndir.lhunath.deblock.data.PlayerEntity;
+import com.lyndir.lhunath.deblock.data.util.EMF;
 import com.lyndir.lhunath.deblock.error.AuthenticationException;
 import com.lyndir.lhunath.lib.system.logging.Logger;
 
@@ -128,18 +127,18 @@ public class PlayerService {
      * 
      * @return The {@link BotEntity} with the given name.
      */
-    public BotEntity getBot(String name) {
+    public PlayerEntity getBot(String name) {
 
         Query botQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
         botQuery.setParameter( "name", name );
-        BotEntity botEntity = null;
+        PlayerEntity botEntity = null;
         try {
-            botEntity = (BotEntity) botQuery.getSingleResult();
+            botEntity = (PlayerEntity) botQuery.getSingleResult();
         } catch (NoResultException e) {}
 
         // Check if the player is already registered. If not, just register him now with the given name and password.
         if (botEntity == null)
-            botEntity = new BotEntity( name );
+            botEntity = new PlayerEntity( name );
 
         return botEntity;
     }

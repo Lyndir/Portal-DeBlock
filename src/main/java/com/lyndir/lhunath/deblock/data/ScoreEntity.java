@@ -13,15 +13,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.lyndir.lhunath.deblock.entity;
+package com.lyndir.lhunath.deblock.data;
 
 import java.text.MessageFormat;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.google.appengine.api.datastore.Key;
 import com.lyndir.lhunath.lib.system.logging.Logger;
@@ -53,12 +55,24 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     private int                 score;
     private Date                achievedDate;
 
+    @ManyToOne(cascade = { CascadeType.ALL })
+    private PlayerEntity        player;
+
 
     public ScoreEntity() {
 
     }
 
-    public ScoreEntity(int score, Date achievedDate) {
+    public ScoreEntity(PlayerEntity player) {
+
+        this();
+
+        this.player = player;
+    }
+
+    public ScoreEntity(PlayerEntity player, int score, Date achievedDate) {
+
+        this( player );
 
         if (achievedDate == null)
             throw logger.bug( "Date when score was achieved can't be unset." ).toError( IllegalArgumentException.class );
@@ -74,6 +88,14 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     public String toString() {
 
         return MessageFormat.format( "[Score: {0}]", score );
+    }
+
+    /**
+     * @return The player of this {@link ScoreEntity}.
+     */
+    public PlayerEntity getPlayer() {
+
+        return player;
     }
 
     /**

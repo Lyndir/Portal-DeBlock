@@ -1,4 +1,4 @@
-package com.lyndir.lhunath.deblock.entity.util;
+package com.lyndir.lhunath.deblock.data.util;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

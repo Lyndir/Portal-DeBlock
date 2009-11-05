@@ -17,7 +17,8 @@ package com.lyndir.lhunath.deblock.service;
 
 import java.util.Date;
 
-import com.lyndir.lhunath.deblock.entity.ScoreEntity;
+import com.lyndir.lhunath.deblock.data.PlayerEntity;
+import com.lyndir.lhunath.deblock.data.ScoreEntity;
 import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
@@ -53,6 +54,8 @@ public class ScoreService {
     /**
      * Add a new score value to the given player's profile.
      * 
+     * @param player
+     *            The player that anchieved the given score.
      * @param score
      *            The score value that was achieved.
      * @param date
@@ -60,7 +63,7 @@ public class ScoreService {
      * 
      * @return The {@link ScoreEntity} that records the given score for the given player.
      */
-    public ScoreEntity addScore(Integer score, Date date) {
+    public ScoreEntity addScore(PlayerEntity player, Integer score, Date date) {
 
         if (score == null)
             throw logger.err( "No score specified to add to player." ).toError( IllegalArgumentException.class );
@@ -69,6 +72,6 @@ public class ScoreService {
         if (date.after( new Date() ))
             throw logger.err( "Can't add scores achieved in the future." ).toError( IllegalArgumentException.class );
 
-        return new ScoreEntity( score, date );
+        return new ScoreEntity( player, score, date );
     }
 }
