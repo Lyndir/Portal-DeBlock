@@ -76,17 +76,19 @@ public class ScoreServlet extends HttpServlet {
             // Read request parameters.
             String name = request.getParameter( "name" );
             String pass = request.getParameter( "pass" );
+            String date_ = request.getParameter( "date" );
+            String score_ = request.getParameter( "score" );
             String check = request.getParameter( "check" );
-            Integer score = Utils.parseInt( request.getParameter( "score" ) );
-            Long timeStamp = Utils.parseLong( request.getParameter( "date" ) );
-            logger.dbg( "Servicing: name=%s, pass=%s, check=%s, score=%s, timeStamp=%s", name, pass, check, score,
-                        timeStamp );
+            logger.dbg( "Servicing: name=%s, pass=%s, date=%s, score=%s, check=%s", //
+                        name, pass, date_, score_, check );
+            Integer score = Utils.parseInt( score_ );
+            Long timeStamp = Utils.parseLong( date_ );
 
             Date date = null;
             if (timeStamp != null)
                 date = new Date( timeStamp );
 
-            recordScore( response, name, pass, check, score, date );
+            recordScore( name, pass, check, score, date );
             writeScores( response );
 
             // Finished successfully.
@@ -105,33 +107,19 @@ public class ScoreServlet extends HttpServlet {
         }
     }
 
-    private void recordScore(HttpServletResponse response, String name, String pass, String check, Integer score,
-                             Date date)
-            throws IOException, AuthenticationException {
+    private void recordScore(String name, String pass, String check, Integer score, Date date)
+            throws AuthenticationException {
 
-        // See if this request is posting a new score.
-        if (name != null && name.length() > 0 && score != null && score > 0) {
+        // Validate checksum.
+        CheckUtil.assertValidChecksum( name, score, check );
 
-            // Validate checksum.
-            if (check == null || check.length() == 0) {
-                logger.inf( "Service failed: missing checksum." );
-                response.sendError( HttpServletResponse.SC_BAD_REQUEST, "Checksum missing." );
-                return;
-            }
-            if (!CheckUtil.check( name, score, check )) {
-                logger.inf( "Service failed: invalid checksum: %s.", check );
-                response.sendError( HttpServletResponse.SC_BAD_REQUEST, "Checksum invalid." );
-                return;
-            }
+        // Record the new score.
+        PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
+        ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
+        playerEntity.getScores().add( newScoreEntity );
 
-            // Record the new score.
-            PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
-            ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
-            playerEntity.getScores().add( newScoreEntity );
-
-            // Save player (and scores).
-            PlayerService.get().save( playerEntity );
-        }
+        // Save player (and scores).
+        PlayerService.get().save( playerEntity );
     }
 
     private void writeScores(HttpServletResponse response)

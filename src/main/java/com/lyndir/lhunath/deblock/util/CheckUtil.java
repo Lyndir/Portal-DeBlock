@@ -17,7 +17,9 @@ package com.lyndir.lhunath.deblock.util;
 
 import java.text.MessageFormat;
 
+import com.lyndir.lhunath.deblock.error.ChecksumException;
 import com.lyndir.lhunath.lib.system.Utils;
+import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
 /**
@@ -36,11 +38,21 @@ import com.lyndir.lhunath.lib.system.Utils;
  */
 public abstract class CheckUtil {
 
-    public static boolean check(String name, int score, String checksum) {
+    private static final Logger logger = Logger.get( CheckUtil.class );
+
+
+    public static void assertValidChecksum(String name, Integer score, String checksum)
+            throws ChecksumException {
+
+        if (name == null || score == null || checksum == null)
+            throw logger.wrn( "Missing checksum or checksum components." ) //
+            .toError( ChecksumException.class, name, score, checksum );
 
         String salt = DeblockProperties.get().getSalt();
         String correctChecksum = Utils.getMD5( MessageFormat.format( "{0}:{1}:{2}", name, score, salt ) );
 
-        return correctChecksum.equalsIgnoreCase( checksum );
+        if (!correctChecksum.equalsIgnoreCase( checksum ))
+            throw logger.wrn( "Incorrect checksum." ) //
+            .toError( ChecksumException.class, name, score, checksum );
     }
 }

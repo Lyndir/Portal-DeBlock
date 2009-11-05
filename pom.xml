@@ -117,7 +117,7 @@
                 <groupId>org.datanucleus</groupId>
                 <artifactId>maven-datanucleus-plugin</artifactId>
                 <configuration>
-                    <mappingIncludes>**/entity/**/*.class</mappingIncludes>
+                    <mappingIncludes>**/data/**/*.class</mappingIncludes>
                     <verbose>true</verbose>
                     <enhancerName>ASM</enhancerName>
                     <api>JPA</api>
