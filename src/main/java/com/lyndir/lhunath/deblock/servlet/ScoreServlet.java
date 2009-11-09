@@ -1,4 +1,4 @@
-package com.lyndir.lhunath.deblock;
+package com.lyndir.lhunath.deblock.servlet;
 
 import java.io.IOException;
 import java.util.Date;
@@ -17,17 +17,14 @@ import com.lyndir.lhunath.deblock.error.AuthenticationException;
 import com.lyndir.lhunath.deblock.service.PlayerService;
 import com.lyndir.lhunath.deblock.service.ScoreService;
 import com.lyndir.lhunath.deblock.util.CheckUtil;
+import com.lyndir.lhunath.deblock.util.DeblockConstants;
 import com.lyndir.lhunath.lib.system.Utils;
 import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
 /**
  * <h2>{@link ScoreServlet}<br>
- * <sub>[in short] (TODO).</sub></h2>
- * 
- * <p>
- * [description / usage].
- * </p>
+ * <sub>A servlet for submitting and retrieving player scores.</sub></h2>
  * 
  * <p>
  * <i>Oct 25, 2009</i>
@@ -41,15 +38,18 @@ public class ScoreServlet extends HttpServlet {
 
 
     /**
+     * GET requests are used to retrieve the current scores.
+     * 
      * {@inheritDoc}
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
-            response.setContentType( "text/plain;charset=UTF-8" );
+        response.setContentType( "text/plain;charset=UTF-8" );
 
+        try {
+            // Look up and write out the current scores.
             writeScores( response );
 
             // Finished successfully.
@@ -64,15 +64,17 @@ public class ScoreServlet extends HttpServlet {
     }
 
     /**
+     * POST requests are used to submit new scores.
+     * 
      * {@inheritDoc}
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
-            response.setContentType( "text/plain;charset=UTF-8" );
+        response.setContentType( "text/plain;charset=UTF-8" );
 
+        try {
             // Read request parameters.
             String name = request.getParameter( "name" );
             String pass = request.getParameter( "pass" );
@@ -88,40 +90,30 @@ public class ScoreServlet extends HttpServlet {
             if (timeStamp != null)
                 date = new Date( timeStamp );
 
+            // Save the score that is being submitted.
             recordScore( name, pass, check, score, date );
-            writeScores( response );
 
             // Finished successfully.
             EMF.closeEm( true );
             logger.dbg( "Service completed successfully." );
         }
 
-        catch (Throwable e) {
-            response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-            throw logger.err( e, "Service failed: caught %s", e ).toError();
+        catch (AuthenticationException e) {
+            response.addHeader( DeblockConstants.ERROR_HEADER, e.getErrorHeader() );
         }
 
         finally {
             // If the entity manager is still open the logic was interrupted early and must have failed.
             EMF.closeEm( false );
         }
+
+        // Write out the current scores (result of a normal GET).
+        doGet( request, response );
     }
 
-    private void recordScore(String name, String pass, String check, Integer score, Date date)
-            throws AuthenticationException {
-
-        // Validate checksum.
-        CheckUtil.assertValidChecksum( name, score, check );
-
-        // Record the new score.
-        PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
-        ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
-        playerEntity.getScores().add( newScoreEntity );
-
-        // Save player (and scores).
-        PlayerService.get().save( playerEntity );
-    }
-
+    /**
+     * Look up and write the current scores to the given response.
+     */
     private void writeScores(HttpServletResponse response)
             throws IOException {
 
@@ -138,5 +130,25 @@ public class ScoreServlet extends HttpServlet {
             json.endObject();
         }
         json.endObject();
+    }
+
+    /**
+     * Record the given score for the given player at the given date after validating authenticity and data sanity.
+     */
+    private void recordScore(String name, String pass, String check, Integer score, Date date)
+            throws AuthenticationException {
+
+        // Validate name and password.
+        PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
+
+        // Validate checksum.
+        CheckUtil.assertValidChecksum( check, name, score, date.getTime() );
+
+        // Record the new score.
+        ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
+        playerEntity.getScores().add( newScoreEntity );
+
+        // Save player (and scores).
+        PlayerService.get().save( playerEntity );
     }
 }

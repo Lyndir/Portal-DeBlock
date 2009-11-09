@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.lyndir.lhunath.deblock.cron;
+package com.lyndir.lhunath.deblock.servlet.cron;
 
 import java.io.IOException;
 import java.util.Date;

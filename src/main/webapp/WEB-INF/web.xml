@@ -14,7 +14,7 @@
     <!--  JSON Score Servlet -->
     <servlet>
         <servlet-name>cron.BotsServlet</servlet-name>
-        <servlet-class>com.lyndir.lhunath.deblock.cron.BotsServlet</servlet-class>
+        <servlet-class>com.lyndir.lhunath.deblock.servlet.cron.BotsServlet</servlet-class>
     </servlet>
 
     <!-- Servlet Mappings -->

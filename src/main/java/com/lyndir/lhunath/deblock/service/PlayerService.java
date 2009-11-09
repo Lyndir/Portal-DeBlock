@@ -24,6 +24,7 @@ import javax.persistence.Query;
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
 import com.lyndir.lhunath.deblock.data.util.EMF;
 import com.lyndir.lhunath.deblock.error.AuthenticationException;
+import com.lyndir.lhunath.deblock.util.DeblockConstants;
 import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
@@ -92,9 +93,12 @@ public class PlayerService {
             throws AuthenticationException {
 
         // Check whether the input is valid.
-        if (name == null || name.isEmpty() || password == null || password.isEmpty())
-            throw logger.err( "Invalid name (%s) or password (%s).", name, password ) //
-            .toError( AuthenticationException.class, name, password );
+        if (name == null || name.isEmpty())
+            throw logger.err( "Name not set." ) //
+            .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_NAME, name, password );
+        if (password == null || password.isEmpty())
+            throw logger.err( "Password not set for player %s.", name ) //
+            .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_PASS, name, password );
 
         Query playerQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
         playerQuery.setParameter( "name", name );

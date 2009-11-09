@@ -15,6 +15,9 @@
  */
 package com.lyndir.lhunath.deblock.error;
 
+import com.lyndir.lhunath.deblock.util.DeblockConstants;
+
+
 /**
  * <h2>{@link ChecksumException}<br>
  * <sub>[in short] (TODO).</sub></h2>
@@ -42,16 +45,21 @@ public class ChecksumException extends AuthenticationException {
      *            The problem description.
      * @param cause
      *            The exception that caused this problem. (optional)
+     * @param errorHeader
+     *            The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
+     *            exception.
      * @param name
      *            The name of the player that was trying to authenticate.
      * @param score
      *            The score that the player had achieved.
      * @param checksum
      *            The checksum that the player's client submitted for the data.
+     * @param errorHeader
      */
-    public ChecksumException(String message, Throwable cause, String name, Integer score, String checksum) {
+    public ChecksumException(String message, Throwable cause, String errorHeader, String name, Integer score,
+            String checksum) {
 
-        super( message, cause, name, null );
+        super( message, cause, errorHeader, name, null );
 
         this.score = score;
         this.checksum = checksum;
