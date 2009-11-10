@@ -82,6 +82,6 @@ public abstract class CheckUtil {
 
         if (!correctChecksum.equalsIgnoreCase( checksum ))
             throw logger.wrn( "Incorrect checksum." ) //
-            .toError( ChecksumException.class, name, score, checksum );
+            .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, name, score, checksum );
     }
 }

@@ -27,10 +27,10 @@ package com.lyndir.lhunath.deblock.util;
  */
 public interface DeblockConstants {
 
-    String ERROR_HEADER        = "X-Deblock-Error";
-    String ERROR_MISSING_NAME  = "missing.name";
-    String ERROR_MISSING_PASS  = "missing.pass";
-    String ERROR_MISSING_CHECK = "missing.check";
-    String ERROR_INVALID_PASS  = "invalid.pass";
-    String ERROR_INVALID_CHECK = "invalid.check";
+    String ERROR_HEADER          = "X-Deblock-Error";
+    String ERROR_MISSING_NAME    = "missing.name";
+    String ERROR_MISSING_PASS    = "missing.pass";
+    String ERROR_MISSING_CHECK   = "missing.check";
+    String ERROR_INCORRECT_PASS  = "incorrect.pass";
+    String ERROR_INCORRECT_CHECK = "incorrect.check";
 }

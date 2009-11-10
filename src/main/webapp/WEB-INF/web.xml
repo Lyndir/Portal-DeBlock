@@ -9,7 +9,7 @@
     <!--  JSON Score Servlet -->
 	<servlet>
 		<servlet-name>JSONScoreServlet</servlet-name>
-		<servlet-class>com.lyndir.lhunath.deblock.ScoreServlet</servlet-class>
+		<servlet-class>com.lyndir.lhunath.deblock.servlet.ScoreServlet</servlet-class>
 	</servlet>
     <!--  JSON Score Servlet -->
     <servlet>

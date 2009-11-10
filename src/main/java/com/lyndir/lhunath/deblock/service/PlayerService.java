@@ -94,10 +94,10 @@ public class PlayerService {
 
         // Check whether the input is valid.
         if (name == null || name.isEmpty())
-            throw logger.err( "Name not set." ) //
+            throw logger.wrn( "Name not set." ) //
             .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_NAME, name, password );
         if (password == null || password.isEmpty())
-            throw logger.err( "Password not set for player %s.", name ) //
+            throw logger.wrn( "Password not set for player %s.", name ) //
             .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_PASS, name, password );
 
         Query playerQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
@@ -113,8 +113,8 @@ public class PlayerService {
 
         // Check whether the registered player's password matches the given password.
         if (!playerEntity.getPassword().equals( password ))
-            throw logger.err( "Incorrect password (%s) for name (%s).", password, name ) //
-            .toError( AuthenticationException.class, name, password );
+            throw logger.wrn( "Incorrect password (%s) for name (%s).", password, name ) //
+            .toError( AuthenticationException.class, DeblockConstants.ERROR_INCORRECT_PASS, name, password );
 
         return playerEntity;
     }
