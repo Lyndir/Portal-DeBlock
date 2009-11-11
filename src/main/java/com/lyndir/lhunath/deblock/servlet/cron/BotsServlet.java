@@ -97,13 +97,11 @@ public class BotsServlet extends HttpServlet {
         botEntity.getScores().add( newScoreEntity );
 
         // Save player (and scores).
-        if (PlayerService.get().save( botEntity ))
-            response.getWriter().write(
-                                        String.format( "[*] Successfully updated score for bot %s to %d.\n",
-                                                       botEntity.getName(), newScoreEntity.getScore() ) );
-        else
-            response.getWriter().write(
-                                        String.format( "[!] Failed updating score for bot %s to %d.\n",
-                                                       botEntity.getName(), newScoreEntity.getScore() ) );
+        PlayerService.get().save( botEntity );
+        response.getWriter().write(
+                                    String.format(
+                                                   "[%20s] Achieved a score of %d at %s.\n", //
+                                                   botEntity.getName(), newScoreEntity.getScore(),
+                                                   newScoreEntity.getAchievedDate() ) );
     }
 }

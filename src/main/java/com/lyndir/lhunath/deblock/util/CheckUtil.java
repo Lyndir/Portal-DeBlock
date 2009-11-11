@@ -15,8 +15,6 @@
  */
 package com.lyndir.lhunath.deblock.util;
 
-import java.text.MessageFormat;
-
 import com.lyndir.lhunath.deblock.error.ChecksumException;
 import com.lyndir.lhunath.lib.system.Utils;
 import com.lyndir.lhunath.lib.system.logging.Logger;
@@ -71,17 +69,18 @@ public abstract class CheckUtil {
     public static void assertValidChecksum(String checksum, String name, Integer score, Long achievedTimeStamp)
             throws ChecksumException {
 
-        if (name == null || score == null || checksum == null)
-            throw logger.wrn( "Missing checksum or checksum data (name %s, score %s, check %s).", //
-                              name, score, checksum ) //
+        if (checksum == null || name == null || score == null || achievedTimeStamp == null)
+            throw logger.wrn( "Missing checksum or checksum data (check %s, name %s, score %s, date %s).", //
+                              checksum, name, score, achievedTimeStamp ) //
             .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, score, checksum );
 
         String salt = DeblockProperties.get().getSalt();
-        String correctChecksum = Utils.getMD5( MessageFormat.format( "{0}:{1}:{2}:{3}", //
-                                                                     salt, name, score, achievedTimeStamp ) );
+        String correctChecksum = Utils.getMD5( String.format( "%s:%s:%d:%d", //
+                                                              salt, name, score, achievedTimeStamp ) );
 
         if (!correctChecksum.equalsIgnoreCase( checksum ))
             throw logger.wrn( "Incorrect checksum." ) //
-            .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, name, score, checksum );
+            .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, checksum, name, score,
+                      achievedTimeStamp );
     }
 }

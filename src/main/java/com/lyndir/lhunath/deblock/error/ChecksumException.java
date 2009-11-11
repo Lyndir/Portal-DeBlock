@@ -36,6 +36,7 @@ public class ChecksumException extends AuthenticationException {
 
     private String  checksum;
     private Integer score;
+    private Long    achievedTimeStamp;
 
 
     /**
@@ -48,21 +49,23 @@ public class ChecksumException extends AuthenticationException {
      * @param errorHeader
      *            The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
      *            exception.
+     * @param checksum
+     *            The checksum that the player's client submitted for the data.
      * @param name
      *            The name of the player that was trying to authenticate.
      * @param score
      *            The score that the player had achieved.
-     * @param checksum
-     *            The checksum that the player's client submitted for the data.
-     * @param errorHeader
+     * @param achievedTimeStamp
+     *            The time in milliseconds since the UNIX epoch.
      */
-    public ChecksumException(String message, Throwable cause, String errorHeader, String name, Integer score,
-            String checksum) {
+    public ChecksumException(String message, Throwable cause, String errorHeader, String checksum, String name,
+            Integer score, Long achievedTimeStamp) {
 
         super( message, cause, errorHeader, name, null );
 
         this.score = score;
         this.checksum = checksum;
+        this.achievedTimeStamp = achievedTimeStamp;
     }
 
     /**
@@ -79,5 +82,13 @@ public class ChecksumException extends AuthenticationException {
     public Integer getScore() {
 
         return score;
+    }
+
+    /**
+     * @return The achievedTimeStamp of this {@link ChecksumException}.
+     */
+    public Long getAchievedTimeStamp() {
+
+        return achievedTimeStamp;
     }
 }

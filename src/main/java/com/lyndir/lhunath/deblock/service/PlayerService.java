@@ -156,31 +156,19 @@ public class PlayerService {
      * @return <code>true</code> if the player's data was successfully saved.<br>
      *         <code>false</code> if something happened made it impossible to save the player's data.
      */
-    public boolean save(PlayerEntity playerEntity) {
+    public void save(PlayerEntity playerEntity) {
 
         EntityTransaction transaction = EMF.getEm().getTransaction();
         try {
             transaction.begin();
-            logger.inf( "Transaction started" );
             EMF.getEm().persist( playerEntity );
             EMF.getEm().flush();
             transaction.commit();
-            logger.inf( "Transaction committed" );
-        }
-
-        catch (Throwable e) {
-            logger.err( e, "unexpected" );
         }
 
         finally {
-            if (transaction.isActive()) {
+            if (transaction.isActive())
                 transaction.rollback();
-                logger.inf( "Transaction rolled back" );
-                return false;
-            }
         }
-
-        logger.inf( "saved successfully" );
-        return true;
     }
 }
