@@ -54,7 +54,10 @@ public class ScoreServlet extends HttpServlet {
 
             // Finished successfully.
             EMF.closeEm( true );
-            logger.dbg( "Service completed successfully." );
+        }
+
+        catch (Throwable e) {
+            logger.bug( e );
         }
 
         finally {
@@ -95,20 +98,21 @@ public class ScoreServlet extends HttpServlet {
 
             // Finished successfully.
             EMF.closeEm( true );
-            logger.dbg( "Service completed successfully." );
         }
 
         catch (AuthenticationException e) {
             response.addHeader( DeblockConstants.ERROR_HEADER, e.getErrorHeader() );
+        } catch (Throwable e) {
+            logger.bug( e );
         }
 
         finally {
             // If the entity manager is still open the logic was interrupted early and must have failed.
             EMF.closeEm( false );
-        }
 
-        // Write out the current scores (result of a normal GET).
-        doGet( request, response );
+            // Write out the current scores (result of a normal GET).
+            doGet( request, response );
+        }
     }
 
     /**

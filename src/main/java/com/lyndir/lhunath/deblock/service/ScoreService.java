@@ -38,8 +38,9 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  */
 public class ScoreService {
 
-    private static final Logger       logger   = Logger.get( ScoreService.class );
-    private static final ScoreService instance = new ScoreService();
+    private static final Logger       logger                     = Logger.get( ScoreService.class );
+    private static final ScoreService instance                   = new ScoreService();
+    private static final long         FUTURE_SCORE_TIME_FRAME_MS = 5 /* min */* 60 /* s */* 1000 /* ms */;
 
 
     public static ScoreService get() {
@@ -65,12 +66,17 @@ public class ScoreService {
      */
     public ScoreEntity addScore(PlayerEntity player, Integer score, Date date) {
 
+        Date now = new Date();
         if (score == null)
-            throw logger.wrn( "No score specified to add to player." ).toError( IllegalArgumentException.class );
+            throw logger.wrn( "No score specified to add to player." ) //
+            .toError( IllegalArgumentException.class );
         if (date == null)
-            throw logger.wrn( "No date specified or score to add to player." ).toError( IllegalArgumentException.class );
-        if (date.after( new Date() ))
-            throw logger.wrn( "Can't add scores achieved in the future." ).toError( IllegalArgumentException.class );
+            throw logger.wrn( "No date specified or score to add to player." ) //
+            .toError( IllegalArgumentException.class );
+        if (date.getTime() - now.getTime() > FUTURE_SCORE_TIME_FRAME_MS)
+            throw logger.wrn( "Can't add scores achieved in the future (given > allowed: %+d ms > +%+d ms).", //
+                              date.getTime() - now.getTime(), FUTURE_SCORE_TIME_FRAME_MS ) //
+            .toError( IllegalArgumentException.class );
 
         return new ScoreEntity( player, score, date );
     }
