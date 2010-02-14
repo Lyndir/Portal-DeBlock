@@ -1,4 +1,4 @@
-package com.lyndir.lhunath.deblock.servlet;
+package com.lyndir.lhunath.deblock.webapp.servlet;
 
 import java.io.IOException;
 import java.util.Date;
@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.util.JSONBuilder;
 
+import com.google.inject.Inject;
+import com.lyndir.lhunath.deblock.data.GameMode;
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
 import com.lyndir.lhunath.deblock.data.ScoreEntity;
 import com.lyndir.lhunath.deblock.data.util.EMF;
@@ -18,8 +20,8 @@ import com.lyndir.lhunath.deblock.service.PlayerService;
 import com.lyndir.lhunath.deblock.service.ScoreService;
 import com.lyndir.lhunath.deblock.util.CheckUtil;
 import com.lyndir.lhunath.deblock.util.DeblockConstants;
-import com.lyndir.lhunath.lib.system.Utils;
 import com.lyndir.lhunath.lib.system.logging.Logger;
+import com.lyndir.lhunath.lib.system.util.Utils;
 
 
 /**
@@ -36,6 +38,16 @@ public class ScoreServlet extends HttpServlet {
 
     private static final Logger logger = Logger.get( ScoreServlet.class );
 
+    private PlayerService       playerService;
+    private ScoreService        scoreService;
+
+
+    @Inject
+    public ScoreServlet(PlayerService playerService, ScoreService scoreService) {
+
+        this.playerService = playerService;
+        this.scoreService = scoreService;
+    }
 
     /**
      * GET requests are used to retrieve the current scores.
@@ -81,11 +93,18 @@ public class ScoreServlet extends HttpServlet {
             // Read request parameters.
             String name = request.getParameter( "name" );
             String pass = request.getParameter( "pass" );
-            String date_ = request.getParameter( "date" );
+            String mode__ = request.getParameter( "mode" );
+            String level_ = request.getParameter( "level" );
             String score_ = request.getParameter( "score" );
+            String date_ = request.getParameter( "date" );
             String check = request.getParameter( "check" );
-            logger.dbg( "Servicing: name=%s, pass=%s, date=%s, score=%s, check=%s", //
-                        name, pass, date_, score_, check );
+            logger.dbg( "Servicing: name=%s, pass=%s, mode=%s, level=%s, score=%s, date=%s, check=%s", //
+                    name, pass, mode__, level_, score_, date_, check );
+            Integer mode_ = Utils.parseInt( mode__ );
+            GameMode mode = null;
+            if (mode_ != null && mode_ >= 0 && mode_ < GameMode.values().length)
+                mode = GameMode.values()[mode_];
+            Integer level = Utils.parseInt( level_ );
             Integer score = Utils.parseInt( score_ );
             Long timeStamp = Utils.parseLong( date_ );
 
@@ -94,7 +113,7 @@ public class ScoreServlet extends HttpServlet {
                 date = new Date( timeStamp );
 
             // Save the score that is being submitted.
-            recordScore( name, pass, check, score, date );
+            recordScore( name, pass, check, mode, level, score, date );
 
             // Finished successfully.
             EMF.closeEm( true );
@@ -123,14 +142,25 @@ public class ScoreServlet extends HttpServlet {
 
         // Output all known scores.
         JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
-        for (PlayerEntity playerEntity : PlayerService.get().getAllPlayers()) {
+        for (PlayerEntity playerEntity : playerService.getAllPlayers()) {
             ScoreEntity lastScoreEntity = playerEntity.getScores().last();
-            json.key( playerEntity.getName() );
 
+            json.key( playerEntity.getName() );
             json.object();
-            String achievedDate = Float.toString( lastScoreEntity.getAchievedDate().getTime() / 1000.0f );
-            json.key( achievedDate );
+
+            json.key( "m" );
+            json.value( lastScoreEntity.getMode() );
+
+            json.key( "l" );
+            json.value( lastScoreEntity.getLevel() );
+
+            json.key( "s" );
             json.value( lastScoreEntity.getScore() );
+
+            json.key( "d" );
+            String achievedDate = Float.toString( lastScoreEntity.getAchievedDate().getTime() / 1000.0f );
+            json.value( achievedDate );
+
             json.endObject();
         }
         json.endObject();
@@ -139,20 +169,21 @@ public class ScoreServlet extends HttpServlet {
     /**
      * Record the given score for the given player at the given date after validating authenticity and data sanity.
      */
-    private void recordScore(String name, String pass, String check, Integer score, Date date)
+    private void recordScore(String name, String pass, String check, GameMode mode, Integer level, Integer score,
+                             Date date)
             throws AuthenticationException {
 
         // Validate name and password.
-        PlayerEntity playerEntity = PlayerService.get().getPlayer( name, pass );
+        PlayerEntity playerEntity = playerService.getPlayer( name, pass );
 
         // Validate checksum.
-        CheckUtil.assertValidChecksum( check, name, score, date.getTime() );
+        CheckUtil.assertValidChecksum( check, name, mode, level, score, date.getTime() );
 
         // Record the new score.
-        ScoreEntity newScoreEntity = ScoreService.get().addScore( playerEntity, score, date );
+        ScoreEntity newScoreEntity = scoreService.addScore( playerEntity, mode, level, score, date );
         playerEntity.getScores().add( newScoreEntity );
 
         // Save player (and scores).
-        PlayerService.get().save( playerEntity );
+        playerService.save( playerEntity );
     }
 }

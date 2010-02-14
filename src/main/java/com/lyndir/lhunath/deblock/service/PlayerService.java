@@ -1,5 +1,5 @@
 /*
- *   Copyright 2009, Maarten Billemont
+ *   Copyright 2010, Maarten Billemont
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,15 +17,8 @@ package com.lyndir.lhunath.deblock.service;
 
 import java.util.List;
 
-import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
-import com.lyndir.lhunath.deblock.data.util.EMF;
 import com.lyndir.lhunath.deblock.error.AuthenticationException;
-import com.lyndir.lhunath.deblock.util.DeblockConstants;
-import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
 /**
@@ -37,36 +30,17 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  * </p>
  * 
  * <p>
- * <i>Oct 29, 2009</i>
+ * <i>Jan 16, 2010</i>
  * </p>
  * 
  * @author lhunath
  */
-public class PlayerService {
-
-    private static final Logger        logger   = Logger.get( PlayerService.class );
-    private static final PlayerService instance = new PlayerService();
-
-
-    public static PlayerService get() {
-
-        return instance;
-    }
-
-    private PlayerService() {
-
-    }
+public interface PlayerService {
 
     /**
      * @return All registered players.
      */
-    public List<PlayerEntity> getAllPlayers() {
-
-        @SuppressWarnings("unchecked")
-        List<PlayerEntity> players = EMF.getEm().createNamedQuery( PlayerEntity.findAll ).getResultList();
-
-        return players;
-    }
+    public List<PlayerEntity> getAllPlayers();
 
     /**
      * Look up the {@link PlayerEntity} with the given name. Checks whether the player's password is equal to the given
@@ -90,34 +64,7 @@ public class PlayerService {
      *             password ( {@link PlayerEntity#getPassword()}).
      */
     public PlayerEntity getPlayer(String name, String password)
-            throws AuthenticationException {
-
-        // Check whether the input is valid.
-        if (name == null || name.isEmpty())
-            throw logger.wrn( "Name not set." ) //
-            .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_NAME, name, password );
-        if (password == null || password.isEmpty())
-            throw logger.wrn( "Password not set for player %s.", name ) //
-            .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_PASS, name, password );
-
-        Query playerQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
-        playerQuery.setParameter( "name", name );
-        PlayerEntity playerEntity = null;
-        try {
-            playerEntity = (PlayerEntity) playerQuery.getSingleResult();
-        } catch (NoResultException e) {}
-
-        // Check if the player is already registered. If not, just register him now with the given name and password.
-        if (playerEntity == null)
-            playerEntity = new PlayerEntity( name, password );
-
-        // Check whether the registered player's password matches the given password.
-        if (!playerEntity.getPassword().equals( password ))
-            throw logger.wrn( "Incorrect password (%s) for name (%s).", password, name ) //
-            .toError( AuthenticationException.class, DeblockConstants.ERROR_INCORRECT_PASS, name, password );
-
-        return playerEntity;
-    }
+            throws AuthenticationException;
 
     /**
      * Look up the {@link BotEntity} with the given name.
@@ -131,21 +78,7 @@ public class PlayerService {
      * 
      * @return The {@link BotEntity} with the given name.
      */
-    public PlayerEntity getBot(String name) {
-
-        Query botQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
-        botQuery.setParameter( "name", name );
-        PlayerEntity botEntity = null;
-        try {
-            botEntity = (PlayerEntity) botQuery.getSingleResult();
-        } catch (NoResultException e) {}
-
-        // Check if the player is already registered. If not, just register him now with the given name and password.
-        if (botEntity == null)
-            botEntity = new PlayerEntity( name );
-
-        return botEntity;
-    }
+    public PlayerEntity getBot(String name);
 
     /**
      * Persist the given player and record his updated data (such as scores).
@@ -156,19 +89,5 @@ public class PlayerService {
      * @return <code>true</code> if the player's data was successfully saved.<br>
      *         <code>false</code> if something happened made it impossible to save the player's data.
      */
-    public void save(PlayerEntity playerEntity) {
-
-        EntityTransaction transaction = EMF.getEm().getTransaction();
-        try {
-            transaction.begin();
-            EMF.getEm().persist( playerEntity );
-            EMF.getEm().flush();
-            transaction.commit();
-        }
-
-        finally {
-            if (transaction.isActive())
-                transaction.rollback();
-        }
-    }
+    public void save(PlayerEntity playerEntity);
 }

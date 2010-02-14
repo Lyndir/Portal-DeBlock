@@ -2,10 +2,10 @@
 
 <cronentries>
 
-    <cron>
+    <!--cron>
 	    <description>Update bot scores every day.</description>
 	    <schedule>every day 00:00</schedule>
         <url>/bots.cron</url>
-    </cron>
+    </cron-->
     
 </cronentries>

@@ -15,9 +15,10 @@
  */
 package com.lyndir.lhunath.deblock.util;
 
+import com.lyndir.lhunath.deblock.data.GameMode;
 import com.lyndir.lhunath.deblock.error.ChecksumException;
-import com.lyndir.lhunath.lib.system.Utils;
 import com.lyndir.lhunath.lib.system.logging.Logger;
+import com.lyndir.lhunath.lib.system.util.Utils;
 
 
 /**
@@ -66,21 +67,25 @@ public abstract class CheckUtil {
     private static final Logger logger = Logger.get( CheckUtil.class );
 
 
-    public static void assertValidChecksum(String checksum, String name, Integer score, Long achievedTimeStamp)
+    public static void assertValidChecksum(String checksum, String name, GameMode mode, Integer level, Integer score,
+                                           Long achievedTimeStamp)
             throws ChecksumException {
 
-        if (checksum == null || name == null || score == null || achievedTimeStamp == null)
-            throw logger.wrn( "Missing checksum or checksum data (check %s, name %s, score %s, date %s).", //
-                              checksum, name, score, achievedTimeStamp ) //
-            .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, score, checksum );
+        if (checksum == null || name == null || mode == null || level == null || score == null
+            || achievedTimeStamp == null)
+            throw logger.wrn(
+                    "Missing checksum or checksum data (check %s, name %s, mode %s, level %s, score %s, date %s).", //
+                    checksum, name, mode, level, score, achievedTimeStamp ) //
+                        .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, mode, level,
+                                score, checksum );
 
         String salt = DeblockProperties.get().getSalt();
-        String correctChecksum = Utils.getMD5( String.format( "%s:%s:%d:%d", //
-                                                              salt, name, score, achievedTimeStamp ) );
+        String correctChecksum = Utils.getMD5( String.format( "%s:%s:%d:%d:%d:%d", //
+                salt, name, mode.ordinal(), level, score, achievedTimeStamp ) );
 
         if (!correctChecksum.equalsIgnoreCase( checksum ))
             throw logger.wrn( "Incorrect checksum." ) //
-            .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, checksum, name, score,
-                      achievedTimeStamp );
+                        .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, checksum, name,
+                                score, achievedTimeStamp );
     }
 }

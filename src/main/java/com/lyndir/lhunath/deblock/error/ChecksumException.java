@@ -15,6 +15,7 @@
  */
 package com.lyndir.lhunath.deblock.error;
 
+import com.lyndir.lhunath.deblock.data.GameMode;
 import com.lyndir.lhunath.deblock.util.DeblockConstants;
 
 
@@ -34,9 +35,11 @@ import com.lyndir.lhunath.deblock.util.DeblockConstants;
  */
 public class ChecksumException extends AuthenticationException {
 
-    private String  checksum;
-    private Integer score;
-    private Long    achievedTimeStamp;
+    private String   checksum;
+    private GameMode mode;
+    private Integer  level;
+    private Integer  score;
+    private Long     achievedTimeStamp;
 
 
     /**
@@ -53,16 +56,22 @@ public class ChecksumException extends AuthenticationException {
      *            The checksum that the player's client submitted for the data.
      * @param name
      *            The name of the player that was trying to authenticate.
+     * @param mode
+     *            The game mode that the score was achieved in.
+     * @param level
+     *            The game level that the score was achieved in.
      * @param score
      *            The score that the player had achieved.
      * @param achievedTimeStamp
      *            The time in milliseconds since the UNIX epoch.
      */
     public ChecksumException(String message, Throwable cause, String errorHeader, String checksum, String name,
-            Integer score, Long achievedTimeStamp) {
+                             GameMode mode, Integer level, Integer score, Long achievedTimeStamp) {
 
         super( message, cause, errorHeader, name, null );
 
+        this.mode = mode;
+        this.level = level;
         this.score = score;
         this.checksum = checksum;
         this.achievedTimeStamp = achievedTimeStamp;
@@ -74,6 +83,22 @@ public class ChecksumException extends AuthenticationException {
     public String getChecksum() {
 
         return checksum;
+    }
+
+    /**
+     * @return The mode of this {@link ChecksumException}.
+     */
+    public GameMode getMode() {
+
+        return mode;
+    }
+
+    /**
+     * @return The level of this {@link ChecksumException}.
+     */
+    public Integer getLevel() {
+
+        return level;
     }
 
     /**

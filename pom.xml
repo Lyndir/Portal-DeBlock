@@ -12,9 +12,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.lyndir.lhunath.deblock</groupId>
+    <groupId>com.lyndir.lhunath.deblock.webapp</groupId>
     <artifactId>deblock-web</artifactId>
-    <version>1-snapshot</version>
+    <version>1</version>
     <packaging>war</packaging>
 
     <name>Deblock: The Website</name>
@@ -29,36 +29,15 @@
         <url>http://www.lhunath.com</url>
     </organization>
 
-
-    <!-- DEVELOPERS -->
-    <developers>
-        <developer>
-            <id>lhunath</id>
-            <name>Maarten Billemont</name>
-            <email>lhunath@gmail.com</email>
-            <roles>
-                <role>development</role>
-            </roles>
-            <timezone>+1</timezone>
-            <properties>
-                <jabber>lhunath@gmail.com</jabber>
-                <msn>lhunath@lyndir.com</msn>
-                <msn>15559107</msn>
-                <private-email>lhunath@gmail.com</private-email>
-            </properties>
-        </developer>
-    </developers>
-
-
     <!-- CODE MANAGEMENT -->
     <scm>
-        <url>http://deblock.lyndir.com</url>
-        <connection>${scm.git.pubbase}/Deblock.git/Web</connection>
-        <developerConnection>${scm.git.devbase}/Deblock.git/Web</developerConnection>
+        <url>http://codaset.com/lhunath/Deblock</url>
+        <connection>${scm.git.pubbase}/Deblock.git</connection>
+        <developerConnection>${scm.git.devbase}/Deblock.git</developerConnection>
     </scm>
     <issueManagement>
-        <system>Trac</system>
-        <url>http://deblock.lyndir.com/trac</url>
+        <system>Codaset</system>
+        <url>http://codaset.com/lhunath/Deblock/tickets</url>
     </issueManagement>
 
 
@@ -111,7 +90,16 @@
 							</excludes>
 						</resource>
 					</webResources>
-                </configuration>
+					<overlays>
+						<overlay>
+							<groupId>com.lyndir.lhunath.apps</groupId>
+							<artifactId>apps-webapp</artifactId>
+							<excludes>
+								<exclude>WEB-INF/web.xml</exclude>
+							</excludes>
+						</overlay>
+					</overlays>
+             </configuration>
             </plugin>
             <plugin>
                 <groupId>org.datanucleus</groupId>
@@ -130,6 +118,35 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.jdo</groupId>
+                        <artifactId>jdo2-api</artifactId>
+                        <version>2.3-eb</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+                <version>6.1.15</version>
+                <configuration>
+                    <contextPath>/</contextPath>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>logback.configurationFile</name>
+                            <value>${basedir}/target/classes/logback.xml</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                        <version>0.9.15</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -144,27 +161,20 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- CONTAINER -->
+        <!-- APPS -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <groupId>com.lyndir.lhunath.apps</groupId>
+            <artifactId>apps-domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
+            <groupId>com.lyndir.lhunath.apps</groupId>
+            <artifactId>apps-webapp</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-        </dependency>
+
+        <!-- GOOGLE APP ENGINE -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
@@ -181,37 +191,30 @@
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jpa_3.0_spec</artifactId>
         </dependency>
-
         <!-- TODO: REMOVE WHEN GOOGLE'S MAVEN REPO UPDATES ITS DATANUCLEUS-APPENGINE ARTIFACT. -->
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-1.0-sdk</artifactId>
-            <version>1.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-core</artifactId>
-            <version>1.1.5</version>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-jpa</artifactId>
-            <version>1.1.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jta_1.1_spec</artifactId>
-            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jpa_3.0_spec</artifactId>
-            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo2-api</artifactId>
-            <version>2.3-eb</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->

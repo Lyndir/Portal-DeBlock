@@ -17,15 +17,15 @@ package com.lyndir.lhunath.deblock.data;
 
 public enum Bot {
 
-    JOHN ("John", 4763, 0.2f),
-    AERYN ("Aeryn", 4961, 0.2f),
-    DARGO ("D'Argo", 4689, 0.15f),
-    ZHAAN ("Zhaan", 7386, 0.1f),
-    RYGEL ("Rygel", 1497, 0.2f),
-    CHIANA ("Chiana", 2892, 0.3f),
-    PILOT ("Pilot", 12744, 0.1f),
-    CRAIS ("Crais", 382, 0.3f),
-    SCORPIUS ("Scorpius", 3790, 0.1f);
+    JOHN("John", 4763, 0.2f),
+    AERYN("Aeryn", 4961, 0.2f),
+    DARGO("D'Argo", 4689, 0.15f),
+    ZHAAN("Zhaan", 7386, 0.1f),
+    RYGEL("Rygel", 1497, 0.2f),
+    CHIANA("Chiana", 2892, 0.3f),
+    PILOT("Pilot", 12744, 0.1f),
+    CRAIS("Crais", 382, 0.3f),
+    SCORPIUS("Scorpius", 3790, 0.1f), ;
 
     private String name;
     private int    baseScore;
@@ -35,9 +35,9 @@ public enum Bot {
     Bot(String name, int baseScore, float luck) {
 
         if (luck > 1 || luck < 0)
-            throw new IllegalArgumentException(
-                    String.format( "Bot %s was given a luck value of %d.  Luck must be in the range 0..1.", //
-                                   name, luck ) );
+            throw new IllegalArgumentException( String.format(
+                    "Bot %s was given a luck value of %d.  Luck must be in the range 0..1.", //
+                    name, luck ) );
 
         this.name = name;
         this.baseScore = baseScore;

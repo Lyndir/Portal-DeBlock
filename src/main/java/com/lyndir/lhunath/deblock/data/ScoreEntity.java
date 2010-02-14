@@ -15,15 +15,9 @@
  */
 package com.lyndir.lhunath.deblock.data;
 
+import javax.persistence.*;
 import java.text.MessageFormat;
 import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import com.google.appengine.api.datastore.Key;
 import com.lyndir.lhunath.lib.system.logging.Logger;
@@ -32,15 +26,15 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link ScoreEntity}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 25, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 @Entity
@@ -50,13 +44,15 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key                 id;
+    private Key id;
 
-    private int                 score;
-    private Date                achievedDate;
+    private GameMode mode;
+    private int level;
+    private int score;
+    private Date achievedDate;
 
-    @ManyToOne(cascade = { CascadeType.ALL })
-    private PlayerEntity        player;
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private PlayerEntity player;
 
 
     public ScoreEntity() {
@@ -70,15 +66,17 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
         this.player = player;
     }
 
-    public ScoreEntity(PlayerEntity player, int score, Date achievedDate) {
+    public ScoreEntity(PlayerEntity player, GameMode mode, int level, int score, Date achievedDate) {
 
         this( player );
 
         if (achievedDate == null)
             throw logger.bug( "Date when score was achieved can't be unset." ).toError( IllegalArgumentException.class );
 
-        this.score = score;
-        this.achievedDate = achievedDate;
+        setMode( mode );
+        setLevel( level );
+        setScore( score );
+        setAchievedDate( achievedDate );
     }
 
     /**
@@ -107,8 +105,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     }
 
     /**
-     * @param score
-     *            The score of this {@link ScoreEntity}.
+     * @param score The score of this {@link ScoreEntity}.
      */
     public void setScore(int score) {
 
@@ -124,12 +121,43 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     }
 
     /**
-     * @param achievedDate
-     *            The achievedDate of this {@link ScoreEntity}.
+     * @param achievedDate The achievedDate of this {@link ScoreEntity}.
      */
     public void setAchievedDate(Date achievedDate) {
 
         this.achievedDate = achievedDate;
+    }
+
+    /**
+     * @return The game mode in which the score was achieved.
+     */
+    public GameMode getMode() {
+
+        return mode;
+    }
+
+    /**
+     * @param mode The game mode in which the score was achieved.
+     */
+    public void setMode(GameMode mode) {
+
+        this.mode = mode;
+    }
+
+    /**
+     * @return The level in which the score was achieved.
+     */
+    public int getLevel() {
+
+        return level;
+    }
+
+    /**
+     * @param level The level in which the score was achieved.
+     */
+    public void setLevel(int level) {
+
+        this.level = level;
     }
 
     /**
@@ -141,8 +169,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     }
 
     /**
-     * @param id
-     *            The id of this {@link ScoreEntity}.
+     * @param id The id of this {@link ScoreEntity}.
      */
     public void setId(Key id) {
 
@@ -151,7 +178,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
 
     /**
      * {@link ScoreEntity}s are sorted according to the date they were achieved.
-     * 
+     *
      * @see #getAchievedDate()
      */
     public int compareTo(ScoreEntity o) {

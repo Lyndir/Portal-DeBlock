@@ -6,41 +6,33 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <!--  JSON Score Servlet -->
-	<servlet>
-		<servlet-name>JSONScoreServlet</servlet-name>
-		<servlet-class>com.lyndir.lhunath.deblock.servlet.ScoreServlet</servlet-class>
-	</servlet>
-    <!--  JSON Score Servlet -->
-    <servlet>
-        <servlet-name>cron.BotsServlet</servlet-name>
-        <servlet-class>com.lyndir.lhunath.deblock.servlet.cron.BotsServlet</servlet-class>
-    </servlet>
+    <display-name>${pom.name}</display-name>
 
-    <!-- Servlet Mappings -->
-    <servlet-mapping>
-		<servlet-name>JSONScoreServlet</servlet-name>
-		<url-pattern>/scores.json</url-pattern>
-	</servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>cron.BotsServlet</servlet-name>
-        <url-pattern>/bots.cron</url-pattern>
-    </servlet-mapping>
+    <!-- Application Event Listeners -->
+    <listener>
+        <listener-class>com.lyndir.lhunath.deblock.webapp.listener.DeblockServletContextListener</listener-class>
+    </listener>
 
-    <!-- Default Configuration -->
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
+    <!-- Application Filter Definitions And Mappings -->
+    <filter>
+        <filter-name>GuiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GuiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!-- Security Configuration -->
-    <security-constraint>
+    <!--security-constraint>
         <web-resource-collection>
             <url-pattern>/scores.json</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
-    </security-constraint>
+    </security-constraint-->
     <security-constraint>
         <web-resource-collection>
             <url-pattern>/*.cron</url-pattern>
@@ -49,6 +41,5 @@
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
-    
 
 </web-app>

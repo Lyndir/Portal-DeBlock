@@ -13,18 +13,19 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.lyndir.lhunath.deblock.servlet.cron;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.Random;
+package com.lyndir.lhunath.deblock.webapp.servlet.cron;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Random;
 
+import com.google.inject.Inject;
 import com.lyndir.lhunath.deblock.data.Bot;
+import com.lyndir.lhunath.deblock.data.GameMode;
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
 import com.lyndir.lhunath.deblock.data.ScoreEntity;
 import com.lyndir.lhunath.deblock.data.util.EMF;
@@ -37,23 +38,33 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link BotsServlet}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Nov 4, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class BotsServlet extends HttpServlet {
 
-    static final Logger logger = Logger.get( BotsServlet.class );
+    static final Logger   logger = Logger.get( BotsServlet.class );
 
-    private Random      random = new Random();
+    private Random        random = new Random();
 
+    private PlayerService playerService;
+    private ScoreService  scoreService;
+
+
+    @Inject
+    public BotsServlet(PlayerService playerService, ScoreService scoreService) {
+
+        this.playerService = playerService;
+        this.scoreService = scoreService;
+    }
 
     /**
      * {@inheritDoc}
@@ -82,7 +93,7 @@ public class BotsServlet extends HttpServlet {
 
         long currentTimeMillis = System.currentTimeMillis();
         long dayTimeMillis = 1000 /* ms */* 3600 /* s */* 24 /* h */;
-        PlayerEntity botEntity = PlayerService.get().getBot( bot.getName() );
+        PlayerEntity botEntity = playerService.getBot( bot.getName() );
 
         // Determine the bot's newly achieved score based on his base score, luck and experience.
         float registeredDays = (currentTimeMillis - botEntity.getRegistered().getTime()) / dayTimeMillis;
@@ -93,15 +104,13 @@ public class BotsServlet extends HttpServlet {
 
         // Record a new score for the bot achieved at the random time span since now.
         Date achievedDate = new Date( (long) (currentTimeMillis - random.nextFloat() * dayTimeMillis) );
-        ScoreEntity newScoreEntity = ScoreService.get().addScore( botEntity, newScore, achievedDate );
+        // FIXME: Doesn't support level and only Classic game mode.
+        ScoreEntity newScoreEntity = scoreService.addScore( botEntity, GameMode.Classic, null, newScore, achievedDate );
         botEntity.getScores().add( newScoreEntity );
 
         // Save player (and scores).
-        PlayerService.get().save( botEntity );
-        response.getWriter().write(
-                                    String.format(
-                                                   "[%20s] Achieved a score of %d at %s.\n", //
-                                                   botEntity.getName(), newScoreEntity.getScore(),
-                                                   newScoreEntity.getAchievedDate() ) );
+        playerService.save( botEntity );
+        response.getWriter().write( String.format( "[%20s] Achieved a score of %d at %s.\n", //
+                botEntity.getName(), newScoreEntity.getScore(), newScoreEntity.getAchievedDate() ) );
     }
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2009, Maarten Billemont
+ *   Copyright 2010, Maarten Billemont
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,67 +17,42 @@ package com.lyndir.lhunath.deblock.service;
 
 import java.util.Date;
 
+import com.lyndir.lhunath.deblock.data.GameMode;
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
 import com.lyndir.lhunath.deblock.data.ScoreEntity;
-import com.lyndir.lhunath.lib.system.logging.Logger;
 
 
 /**
  * <h2>{@link ScoreService}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
- * <i>Oct 29, 2009</i>
+ * <i>Jan 16, 2010</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
-public class ScoreService {
-
-    private static final Logger       logger                     = Logger.get( ScoreService.class );
-    private static final ScoreService instance                   = new ScoreService();
-    private static final long         FUTURE_SCORE_TIME_FRAME_MS = 5 /* min */* 60 /* s */* 1000 /* ms */;
-
-
-    public static ScoreService get() {
-
-        return instance;
-    }
-
-    private ScoreService() {
-
-    }
+public interface ScoreService {
 
     /**
      * Add a new score value to the given player's profile.
-     * 
+     *
      * @param player
      *            The player that achieved the given score.
+     * @param mode
+     *              The game mode in which the score was achieved.
+     * @param level
+     *              The level in which the score was achieved.
      * @param score
      *            The score value that was achieved.
      * @param date
      *            The date that the player achieved the given score.
-     * 
+     *
      * @return The {@link ScoreEntity} that records the given score for the given player.
      */
-    public ScoreEntity addScore(PlayerEntity player, Integer score, Date date) {
-
-        Date now = new Date();
-        if (score == null)
-            throw logger.wrn( "No score specified to add to player." ) //
-            .toError( IllegalArgumentException.class );
-        if (date == null)
-            throw logger.wrn( "No date specified or score to add to player." ) //
-            .toError( IllegalArgumentException.class );
-        if (date.getTime() - now.getTime() > FUTURE_SCORE_TIME_FRAME_MS)
-            throw logger.wrn( "Can't add scores achieved in the future (given > allowed: %+d ms > +%+d ms).", //
-                              date.getTime() - now.getTime(), FUTURE_SCORE_TIME_FRAME_MS ) //
-            .toError( IllegalArgumentException.class );
-
-        return new ScoreEntity( player, score, date );
-    }
+    public ScoreEntity addScore(PlayerEntity player, GameMode mode, Integer level, Integer score, Date date);
 }

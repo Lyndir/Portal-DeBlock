@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+source bashlib
+
+target=${0%/*}; [[ $target = /* ]] || target=$PWD/$target
+while [[ ! -e "$target/pom.xml" ]]
+do target=${target%/*}; done
+target=( "$target/target/"*.war ); target=${target[0]%.war}
+
+if (( $# )); then
+    emit "Running appcfg $1 $target${2:+ ${@:2}}"
+    appcfg "$1" "$target" ${2:+"${@:2}"}
+else
+    emit "Deploying web application"
+    appcfg update "$target"
+fi
