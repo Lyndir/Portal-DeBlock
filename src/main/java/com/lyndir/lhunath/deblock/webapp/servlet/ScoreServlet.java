@@ -149,29 +149,33 @@ public class ScoreServlet extends HttpServlet {
             throws IOException, AuthenticationException {
 
         // Validate name and password.
-        PlayerEntity playerEntity = playerService.getPlayer( name, pass );
 
         // Output all known scores.
         JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
-        for (ScoreEntity scoreEntity : scoreService.getScoresForPlayer( playerEntity )) {
+        if (name != null) {
+            // Only put scores in response when we know the player in whose context to display the scores.
+            PlayerEntity playerEntity = playerService.getPlayer( name, pass );
 
-            json.key( playerEntity.getName() );
-            json.object();
+            for (ScoreEntity scoreEntity : scoreService.getScoresForPlayer( playerEntity )) {
 
-            json.key( "m" );
-            json.value( scoreEntity.getMode() );
+                json.key( scoreEntity.getPlayer().getName() );
+                json.object();
 
-            json.key( "l" );
-            json.value( scoreEntity.getLevel() );
+                json.key( "m" );
+                json.value( scoreEntity.getMode() );
 
-            json.key( "s" );
-            json.value( scoreEntity.getScore() );
+                json.key( "l" );
+                json.value( scoreEntity.getLevel() );
 
-            json.key( "d" );
-            String achievedDate = Float.toString( scoreEntity.getAchievedDate().getTime() / 1000.0f );
-            json.value( achievedDate );
+                json.key( "s" );
+                json.value( scoreEntity.getScore() );
 
-            json.endObject();
+                json.key( "d" );
+                String achievedDate = Float.toString( scoreEntity.getAchievedDate().getTime() / 1000.0f );
+                json.value( achievedDate );
+
+                json.endObject();
+            }
         }
         json.endObject();
     }
