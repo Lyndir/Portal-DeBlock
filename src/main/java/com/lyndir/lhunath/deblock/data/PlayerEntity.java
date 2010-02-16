@@ -171,6 +171,8 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
+     * {@link ScoreEntity}s are sorted in ascending score value.
+     * 
      * @return The scores of this {@link PlayerEntity}.
      */
     public SortedSet<ScoreEntity> getScores() {

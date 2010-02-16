@@ -61,14 +61,22 @@ public class ScoreServlet extends HttpServlet {
         response.setContentType( "text/plain;charset=UTF-8" );
 
         try {
+            // Read request parameters.
+            String name = request.getParameter( "name" );
+            String pass = request.getParameter( "pass" );
+            logger.dbg( "Servicing: name=%s, pass=%s", //
+                    name, pass );
+
             // Look up and write out the current scores.
-            writeScores( response );
+            writeScores( name, pass, response );
 
             // Finished successfully.
             EMF.closeEm( true );
         }
 
-        catch (Throwable e) {
+        catch (AuthenticationException e) {
+            response.addHeader( DeblockConstants.ERROR_HEADER, e.getErrorHeader() );
+        } catch (Throwable e) {
             logger.bug( e );
         }
 
@@ -137,28 +145,30 @@ public class ScoreServlet extends HttpServlet {
     /**
      * Look up and write the current scores to the given response.
      */
-    private void writeScores(HttpServletResponse response)
-            throws IOException {
+    private void writeScores(String name, String pass, HttpServletResponse response)
+            throws IOException, AuthenticationException {
+
+        // Validate name and password.
+        PlayerEntity playerEntity = playerService.getPlayer( name, pass );
 
         // Output all known scores.
         JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
-        for (PlayerEntity playerEntity : playerService.getAllPlayers()) {
-            ScoreEntity lastScoreEntity = playerEntity.getScores().last();
+        for (ScoreEntity scoreEntity : scoreService.getScoresForPlayer( playerEntity )) {
 
             json.key( playerEntity.getName() );
             json.object();
 
             json.key( "m" );
-            json.value( lastScoreEntity.getMode() );
+            json.value( scoreEntity.getMode() );
 
             json.key( "l" );
-            json.value( lastScoreEntity.getLevel() );
+            json.value( scoreEntity.getLevel() );
 
             json.key( "s" );
-            json.value( lastScoreEntity.getScore() );
+            json.value( scoreEntity.getScore() );
 
             json.key( "d" );
-            String achievedDate = Float.toString( lastScoreEntity.getAchievedDate().getTime() / 1000.0f );
+            String achievedDate = Float.toString( scoreEntity.getAchievedDate().getTime() / 1000.0f );
             json.value( achievedDate );
 
             json.endObject();
