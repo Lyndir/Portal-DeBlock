@@ -181,6 +181,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
      *
      * @see #getAchievedDate()
      */
+    @Override
     public int compareTo(ScoreEntity o) {
 
         return score - o.score;

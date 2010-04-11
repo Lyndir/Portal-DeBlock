@@ -22,48 +22,39 @@ import com.lyndir.lhunath.deblock.util.DeblockConstants;
 /**
  * <h2>{@link ChecksumException}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Nov 6, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class ChecksumException extends AuthenticationException {
 
-    private String   checksum;
+    private String checksum;
     private GameMode mode;
-    private Integer  level;
-    private Integer  score;
-    private Long     achievedTimeStamp;
+    private Integer level;
+    private Integer score;
+    private Long achievedTimeStamp;
 
 
     /**
      * Create a new {@link ChecksumException} instance.
-     * 
-     * @param message
-     *            The problem description.
-     * @param cause
-     *            The exception that caused this problem. (optional)
-     * @param errorHeader
-     *            The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
-     *            exception.
-     * @param checksum
-     *            The checksum that the player's client submitted for the data.
-     * @param name
-     *            The name of the player that was trying to authenticate.
-     * @param mode
-     *            The game mode that the score was achieved in.
-     * @param level
-     *            The game level that the score was achieved in.
-     * @param score
-     *            The score that the player had achieved.
-     * @param achievedTimeStamp
-     *            The time in milliseconds since the UNIX epoch.
+     *
+     * @param message           The problem description.
+     * @param cause             The exception that caused this problem. (optional)
+     * @param errorHeader       The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
+     *                          exception.
+     * @param checksum          The checksum that the player's client submitted for the data.
+     * @param name              The name of the player that was trying to authenticate.
+     * @param mode              The game mode that the score was achieved in.
+     * @param level             The game level that the score was achieved in.
+     * @param score             The score that the player had achieved.
+     * @param achievedTimeStamp The time in milliseconds since the UNIX epoch.
      */
     public ChecksumException(String message, Throwable cause, String errorHeader, String checksum, String name,
                              GameMode mode, Integer level, Integer score, Long achievedTimeStamp) {

@@ -15,11 +15,7 @@
  */
 package com.lyndir.lhunath.deblock.service.impl;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
@@ -34,24 +30,24 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link ScoreServiceImpl}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class ScoreServiceImpl implements ScoreService {
 
-    private static final Logger logger                     = Logger.get( ScoreServiceImpl.class );
-    private static final long   FUTURE_SCORE_TIME_FRAME_MS = 5 /* min */* 60 /* s */* 1000 /* ms */;
-    private static final int    SEND_SCORES_ABOVE          = 3;
-    private static final int    SEND_SCORES_BELOW          = 3;
-    private PlayerService       playerService;
+    private static final Logger logger = Logger.get( ScoreServiceImpl.class );
+    private static final long FUTURE_SCORE_TIME_FRAME_MS = 5 /* min */ * 60 /* s */ * 1000 /* ms */;
+    private static final int SEND_SCORES_ABOVE = 3;
+    private static final int SEND_SCORES_BELOW = 3;
+    private PlayerService playerService;
 
 
     @Inject
@@ -63,19 +59,20 @@ public class ScoreServiceImpl implements ScoreService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ScoreEntity addScore(PlayerEntity player, GameMode mode, Integer level, Integer score, Date date) {
 
         Date now = new Date();
         if (score == null)
             throw logger.wrn( "No score specified to add to player." ) //
-                        .toError( IllegalArgumentException.class );
+                    .toError( IllegalArgumentException.class );
         if (date == null)
             throw logger.wrn( "No date specified or score to add to player." ) //
-                        .toError( IllegalArgumentException.class );
+                    .toError( IllegalArgumentException.class );
         if (date.getTime() - now.getTime() > FUTURE_SCORE_TIME_FRAME_MS)
             throw logger.wrn( "Can't add scores achieved in the future (given > allowed: %+d ms > +%+d ms).", //
-                    date.getTime() - now.getTime(), FUTURE_SCORE_TIME_FRAME_MS ) //
-                        .toError( IllegalArgumentException.class );
+                              date.getTime() - now.getTime(), FUTURE_SCORE_TIME_FRAME_MS ) //
+                    .toError( IllegalArgumentException.class );
 
         return new ScoreEntity( player, mode, level, score, date );
     }

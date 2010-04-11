@@ -15,11 +15,10 @@
  */
 package com.lyndir.lhunath.deblock.service.impl;
 
-import java.util.List;
-
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.List;
 
 import com.lyndir.lhunath.deblock.data.PlayerEntity;
 import com.lyndir.lhunath.deblock.data.util.EMF;
@@ -32,15 +31,15 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link PlayerServiceImpl}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class PlayerServiceImpl implements PlayerService {
@@ -55,6 +54,7 @@ public class PlayerServiceImpl implements PlayerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PlayerEntity> getAllPlayers() {
 
         @SuppressWarnings("unchecked")
@@ -66,23 +66,26 @@ public class PlayerServiceImpl implements PlayerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PlayerEntity getPlayer(String name, String password)
             throws AuthenticationException {
 
         // Check whether the input is valid.
         if (name == null || name.isEmpty())
             throw logger.wrn( "Name not set." ) //
-                        .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_NAME, name, password );
+                    .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_NAME, name, password );
         if (password == null || password.isEmpty())
             throw logger.wrn( "Password not set for player %s.", name ) //
-                        .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_PASS, name, password );
+                    .toError( AuthenticationException.class, DeblockConstants.ERROR_MISSING_PASS, name, password );
 
         Query playerQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
         playerQuery.setParameter( "name", name );
         PlayerEntity playerEntity = null;
         try {
             playerEntity = (PlayerEntity) playerQuery.getSingleResult();
-        } catch (NoResultException e) {}
+        }
+        catch (NoResultException e) {
+        }
 
         // Check if the player is already registered. If not, just register him now with the given name and password.
         if (playerEntity == null)
@@ -91,7 +94,7 @@ public class PlayerServiceImpl implements PlayerService {
         // Check whether the registered player's password matches the given password.
         if (!playerEntity.getPassword().equals( password ))
             throw logger.wrn( "Incorrect password (%s) for name (%s).", password, name ) //
-                        .toError( AuthenticationException.class, DeblockConstants.ERROR_INCORRECT_PASS, name, password );
+                    .toError( AuthenticationException.class, DeblockConstants.ERROR_INCORRECT_PASS, name, password );
 
         return playerEntity;
     }
@@ -99,25 +102,7 @@ public class PlayerServiceImpl implements PlayerService {
     /**
      * {@inheritDoc}
      */
-    public PlayerEntity getBot(String name) {
-
-        Query botQuery = EMF.getEm().createNamedQuery( PlayerEntity.findByName );
-        botQuery.setParameter( "name", name );
-        PlayerEntity botEntity = null;
-        try {
-            botEntity = (PlayerEntity) botQuery.getSingleResult();
-        } catch (NoResultException e) {}
-
-        // Check if the player is already registered. If not, just register him now with the given name and password.
-        if (botEntity == null)
-            botEntity = new PlayerEntity( name );
-
-        return botEntity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void save(PlayerEntity playerEntity) {
 
         EntityTransaction transaction = EMF.getEm().getTransaction();

@@ -24,19 +24,19 @@ import com.lyndir.lhunath.lib.system.util.Utils;
 /**
  * <h2>{@link CheckUtil}<br>
  * <sub>Checksum validation utilities.</sub></h2>
- * 
+ *
  * <p>
  * A checksum is a string that is used to verify that the checked data was sent by the client application.
  * </p>
- * 
+ *
  * <p>
  * What we're technically checking is whether the submitter has access to the checksum secret salt, which is a part of
  * the checksum. The checksum is built up of three components:
  * </p>
- * 
+ *
  * <code>[Salt (string)]</code>:<code>[Player Name (string)]</code>:<code>[Score (integer)]</code>:
  * <code>[Timestamp Score (ms since UNIX Epoch) (long)]</code>
- * 
+ *
  * <p>
  * When then submitter knows these three components it can generate the checksum (the MD5 hash of the above string). It
  * submits the checksum along with the score submission request. The server rebuilds the checksum from the given player
@@ -44,22 +44,22 @@ import com.lyndir.lhunath.lib.system.util.Utils;
  * by the client, it can assume the client controls the secret salt. Under this assumption, it assumes the client is the
  * game client and not someone malicious.
  * </p>
- * 
+ *
  * <p>
  * This method is not 100% infallible. An attacker needs to figure out the secret salt in order to obtain privileged
  * access to submit any score for any player for whom he has the password (likely just himself).
  * </p>
- * 
+ *
  * <p>
  * <b> Anyone with enough time on their hands to waste on childish endeavours to figure out an iPhone game's secret salt
  * ought to go find something remotely useful to do with their life instead. Suspicious scores will obviously be
  * investigated and removed.</b>
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public abstract class CheckUtil {
@@ -76,16 +76,16 @@ public abstract class CheckUtil {
             throw logger.wrn(
                     "Missing checksum or checksum data (check %s, name %s, mode %s, level %s, score %s, date %s).", //
                     checksum, name, mode, level, score, achievedTimeStamp ) //
-                        .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, mode, level,
-                                score, checksum );
+                    .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, mode, level,
+                              score, checksum );
 
         String salt = DeblockProperties.get().getSalt();
         String correctChecksum = Utils.getMD5( String.format( "%s:%s:%d:%d:%d:%d", //
-                salt, name, mode.ordinal(), level, score, achievedTimeStamp ) );
+                                                              salt, name, mode.ordinal(), level, score, achievedTimeStamp ) );
 
         if (!correctChecksum.equalsIgnoreCase( checksum ))
             throw logger.wrn( "Incorrect checksum." ) //
-                        .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, checksum, name,
-                                score, achievedTimeStamp );
+                    .toError( ChecksumException.class, DeblockConstants.ERROR_INCORRECT_CHECK, checksum, name,
+                              score, achievedTimeStamp );
     }
 }

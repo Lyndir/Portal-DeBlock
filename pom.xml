@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- PROJECT METADATA -->
     <parent>
         <groupId>com.lyndir.lhunath</groupId>
         <artifactId>lyndir</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>SNAPSHOT</version>
     </parent>
 
     <groupId>com.lyndir.lhunath.deblock.webapp</groupId>
@@ -41,65 +41,65 @@
     </issueManagement>
 
 
-	<!-- BUILD CONFIGURATION -->
+    <!-- BUILD CONFIGURATION -->
     <build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-					<webResources>
-						<resource>
-							<directory>
-								${basedir}/src/main/webapp/WEB-INF
-	                            </directory>
-							<targetPath>WEB-INF</targetPath>
-							<filtering>true</filtering>
-						</resource>
-						<resource>
-							<filtering>false</filtering>
-							<directory>${basedir}/src/main/java
-							</directory>
-							<targetPath>WEB-INF/classes</targetPath>
-							<includes>
-								<include>**/*.html</include>
-								<include>**/*.properties</include>
-							</includes>
-							<excludes>
-								<exclude>**/*.java</exclude>
-							</excludes>
-						</resource>
-					</webResources>
-					<overlays>
-						<overlay>
-							<groupId>com.lyndir.lhunath.apps</groupId>
-							<artifactId>apps-webapp</artifactId>
-							<excludes>
-								<exclude>WEB-INF/web.xml</exclude>
-							</excludes>
-						</overlay>
-					</overlays>
-             </configuration>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <webResources>
+                        <resource>
+                            <directory>
+                                ${basedir}/src/main/webapp/WEB-INF
+                            </directory>
+                            <targetPath>WEB-INF</targetPath>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <filtering>false</filtering>
+                            <directory>${basedir}/src/main/java
+                            </directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                            <includes>
+                                <include>**/*.html</include>
+                                <include>**/*.properties</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*.java</exclude>
+                            </excludes>
+                        </resource>
+                    </webResources>
+                    <overlays>
+                        <overlay>
+                            <groupId>com.lyndir.lhunath.apps</groupId>
+                            <artifactId>apps-webapp</artifactId>
+                            <excludes>
+                                <exclude>WEB-INF/web.xml</exclude>
+                            </excludes>
+                        </overlay>
+                    </overlays>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.datanucleus</groupId>
@@ -151,26 +151,26 @@
         </plugins>
     </build>
 
-	<!-- DEPENDENCY MANAGEMENT -->
-	<dependencies>
+    <!-- DEPENDENCY MANAGEMENT -->
+    <dependencies>
 
         <!-- JLIBS -->
         <dependency>
             <groupId>com.lyndir.lhunath.jlibs</groupId>
             <artifactId>system</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>SNAPSHOT</version>
         </dependency>
 
         <!-- APPS -->
         <dependency>
             <groupId>com.lyndir.lhunath.apps</groupId>
             <artifactId>apps-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.lyndir.lhunath.apps</groupId>
             <artifactId>apps-webapp</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>SNAPSHOT</version>
             <type>war</type>
         </dependency>
 
@@ -218,11 +218,11 @@
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->
-		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
             <classifier>jdk15</classifier>
-		</dependency>
+        </dependency>
 
     </dependencies>
 

@@ -1,14 +1,11 @@
 package com.lyndir.lhunath.deblock.webapp.servlet;
 
-import java.io.IOException;
-import java.util.Date;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.util.JSONBuilder;
+import java.io.IOException;
+import java.util.Date;
 
 import com.google.inject.Inject;
 import com.lyndir.lhunath.deblock.data.GameMode;
@@ -22,24 +19,25 @@ import com.lyndir.lhunath.deblock.util.CheckUtil;
 import com.lyndir.lhunath.deblock.util.DeblockConstants;
 import com.lyndir.lhunath.lib.system.logging.Logger;
 import com.lyndir.lhunath.lib.system.util.Utils;
+import net.sf.json.util.JSONBuilder;
 
 
 /**
  * <h2>{@link ScoreServlet}<br>
  * <sub>A servlet for submitting and retrieving player scores.</sub></h2>
- * 
+ *
  * <p>
  * <i>Oct 25, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class ScoreServlet extends HttpServlet {
 
     private static final Logger logger = Logger.get( ScoreServlet.class );
 
-    private PlayerService       playerService;
-    private ScoreService        scoreService;
+    private PlayerService playerService;
+    private ScoreService scoreService;
 
 
     @Inject
@@ -51,7 +49,7 @@ public class ScoreServlet extends HttpServlet {
 
     /**
      * GET requests are used to retrieve the current scores.
-     * 
+     *
      * {@inheritDoc}
      */
     @Override
@@ -65,7 +63,7 @@ public class ScoreServlet extends HttpServlet {
             String name = request.getParameter( "name" );
             String pass = request.getParameter( "pass" );
             logger.dbg( "Servicing: name=%s, pass=%s", //
-                    name, pass );
+                        name, pass );
 
             // Look up and write out the current scores.
             writeScores( name, pass, response );
@@ -76,7 +74,8 @@ public class ScoreServlet extends HttpServlet {
 
         catch (AuthenticationException e) {
             response.addHeader( DeblockConstants.ERROR_HEADER, e.getErrorHeader() );
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             logger.bug( e );
         }
 
@@ -88,7 +87,7 @@ public class ScoreServlet extends HttpServlet {
 
     /**
      * POST requests are used to submit new scores.
-     * 
+     *
      * {@inheritDoc}
      */
     @Override
@@ -107,7 +106,7 @@ public class ScoreServlet extends HttpServlet {
             String date_ = request.getParameter( "date" );
             String check = request.getParameter( "check" );
             logger.dbg( "Servicing: name=%s, pass=%s, mode=%s, level=%s, score=%s, date=%s, check=%s", //
-                    name, pass, mode__, level_, score_, date_, check );
+                        name, pass, mode__, level_, score_, date_, check );
             Integer mode_ = Utils.parseInt( mode__ );
             GameMode mode = null;
             if (mode_ != null && mode_ >= 0 && mode_ < GameMode.values().length)
@@ -129,7 +128,8 @@ public class ScoreServlet extends HttpServlet {
 
         catch (AuthenticationException e) {
             response.addHeader( DeblockConstants.ERROR_HEADER, e.getErrorHeader() );
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             logger.bug( e );
         }
 
@@ -144,11 +144,16 @@ public class ScoreServlet extends HttpServlet {
 
     /**
      * Look up and write the current scores to the given response.
+     *
+     * @param name     The userName of the player who's requesting the scores.
+     * @param pass     The password the player who's requesting the scores is authenticating himself with.
+     * @param response Where to write the resulting scores to.
+     *
+     * @throws IOException
+     * @throws AuthenticationException When the pass is not valid for the name.
      */
     private void writeScores(String name, String pass, HttpServletResponse response)
             throws IOException, AuthenticationException {
-
-        // Validate name and password.
 
         // Output all known scores.
         JSONBuilder json = new JSONBuilder( response.getWriter() ).object();
@@ -182,6 +187,16 @@ public class ScoreServlet extends HttpServlet {
 
     /**
      * Record the given score for the given player at the given date after validating authenticity and data sanity.
+     *
+     * @param name  The userName of the player who's requesting the scores.
+     * @param pass  The password the player who's requesting the scores is authenticating himself with.
+     * @param check The checksum of the request.
+     * @param mode  The game mode in which the given score was achieved.
+     * @param level The game level in which the given score was achieved.
+     * @param score The score that was achieved.
+     * @param date  The date at which the given score was achieved.
+     *
+     * @throws AuthenticationException When the pass is not valid for the name.
      */
     private void recordScore(String name, String pass, String check, GameMode mode, Integer level, Integer score,
                              Date date)

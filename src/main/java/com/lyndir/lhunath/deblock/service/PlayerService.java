@@ -24,15 +24,15 @@ import com.lyndir.lhunath.deblock.error.AuthenticationException;
 /**
  * <h2>{@link PlayerService}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Jan 16, 2010</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public interface PlayerService {
@@ -45,49 +45,28 @@ public interface PlayerService {
     /**
      * Look up the {@link PlayerEntity} with the given name. Checks whether the player's password is equal to the given
      * password.
-     * 
+     *
      * <p>
      * If no {@link PlayerEntity} exists yet for the given name, a new {@link PlayerEntity} is registered with the given
      * password.
      * </p>
-     * 
-     * @param name
-     *            The name or alias of the player.
-     * @param password
-     *            The password that guarantees only the player has access to his own profile.
-     * 
+     *
+     * @param name     The name or alias of the player.
+     * @param password The password that guarantees only the player has access to his own profile.
+     *
      * @return The {@link PlayerEntity} with the given name.
-     * 
-     * @throws AuthenticationException
-     *             When the given name or password is <code>null</code> or empty ({@link String#isEmpty()}). Also when
-     *             the given password is not equal ({@link #equals(Object)}) to the existing {@link PlayerEntity}'s
-     *             password ( {@link PlayerEntity#getPassword()}).
+     *
+     * @throws AuthenticationException When the given name or password is <code>null</code> or empty ({@link String#isEmpty()}). Also when
+     *                                 the given password is not equal ({@link #equals(Object)}) to the existing {@link PlayerEntity}'s
+     *                                 password ( {@link PlayerEntity#getPassword()}).
      */
     public PlayerEntity getPlayer(String name, String password)
             throws AuthenticationException;
 
     /**
-     * Look up the {@link BotEntity} with the given name.
-     * 
-     * <p>
-     * If no {@link BotEntity} exists yet for the given name, a new {@link BotEntity} is registered.
-     * </p>
-     * 
-     * @param name
-     *            The name or alias of the bot.
-     * 
-     * @return The {@link BotEntity} with the given name.
-     */
-    public PlayerEntity getBot(String name);
-
-    /**
      * Persist the given player and record his updated data (such as scores).
-     * 
-     * @param playerEntity
-     *            The player whose updated data needs to be saved.
-     * 
-     * @return <code>true</code> if the player's data was successfully saved.<br>
-     *         <code>false</code> if something happened made it impossible to save the player's data.
+     *
+     * @param playerEntity The player whose updated data needs to be saved.
      */
     public void save(PlayerEntity playerEntity);
 }

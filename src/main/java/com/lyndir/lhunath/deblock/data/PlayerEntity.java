@@ -18,20 +18,10 @@ package com.lyndir.lhunath.deblock.data;
 import static com.lyndir.lhunath.deblock.data.PlayerEntity.findAll;
 import static com.lyndir.lhunath.deblock.data.PlayerEntity.findByName;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.google.appengine.api.datastore.Key;
 import com.lyndir.lhunath.lib.system.logging.Logger;
@@ -40,38 +30,38 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link PlayerEntity}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
-@NamedQueries( { @NamedQuery(name = findAll, query = "SELECT p FROM PlayerEntity p"),
-                @NamedQuery(name = findByName, query = "SELECT p FROM PlayerEntity p WHERE p.name = :name") })
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+@NamedQueries({@NamedQuery(name = findAll, query = "SELECT p FROM PlayerEntity p"),
+        @NamedQuery(name = findByName, query = "SELECT p FROM PlayerEntity p WHERE p.name = :name")})
 public class PlayerEntity implements Comparable<PlayerEntity> {
 
-    private static final Logger    logger     = Logger.get( PlayerEntity.class );
+    private static final Logger logger = Logger.get( PlayerEntity.class );
 
-    public static final String     findAll    = "PlayerEntity.findAll";
-    public static final String     findByName = "PlayerEntity.findByName";
+    public static final String findAll = "PlayerEntity.findAll";
+    public static final String findByName = "PlayerEntity.findByName";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key                    id;
+    private Key id;
 
-    private String                 name;
-    private String                 password;
+    private String name;
+    private String password;
 
-    private Date                   registered;
+    private Date registered;
 
-    @OneToMany(mappedBy = "player", cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "player", cascade = {CascadeType.ALL})
     private SortedSet<ScoreEntity> scores;
 
 
@@ -105,8 +95,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
-     * @param id
-     *            The id of this {@link PlayerEntity}.
+     * @param id The id of this {@link PlayerEntity}.
      */
     public void setId(Key id) {
 
@@ -122,8 +111,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
-     * @param name
-     *            The name of this {@link PlayerEntity}.
+     * @param name The name of this {@link PlayerEntity}.
      */
     public void setName(String name) {
 
@@ -142,8 +130,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
-     * @param password
-     *            The password of this {@link PlayerEntity}.
+     * @param password The password of this {@link PlayerEntity}.
      */
     public void setPassword(String password) {
 
@@ -162,8 +149,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
-     * @param registered
-     *            The registered of this {@link PlayerEntity}.
+     * @param registered The registered of this {@link PlayerEntity}.
      */
     public void setRegistered(Date registered) {
 
@@ -172,7 +158,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
 
     /**
      * {@link ScoreEntity}s are sorted in ascending score value.
-     * 
+     *
      * @return The scores of this {@link PlayerEntity}.
      */
     public SortedSet<ScoreEntity> getScores() {
@@ -181,8 +167,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     }
 
     /**
-     * @param scores
-     *            The scores of this {@link PlayerEntity}.
+     * @param scores The scores of this {@link PlayerEntity}.
      */
     public void setScores(SortedSet<ScoreEntity> scores) {
 
@@ -192,6 +177,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compareTo(PlayerEntity o) {
 
         return registered.compareTo( o.registered );

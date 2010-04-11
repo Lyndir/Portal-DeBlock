@@ -25,32 +25,32 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
 /**
  * <h2>{@link DeblockProperties}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class DeblockProperties {
 
-    private static final Logger            logger                     = Logger.get( DeblockProperties.class );
+    private static final Logger logger = Logger.get( DeblockProperties.class );
 
-    private static final String            CONFIG_PROPERTIES_RESOURCE = "deblock-config.xml";
-    private static final String            SECRET_PROPERTIES_RESOURCE = "deblock-secret.xml";
+    private static final String CONFIG_PROPERTIES_RESOURCE = "deblock-config.xml";
+    private static final String SECRET_PROPERTIES_RESOURCE = "deblock-secret.xml";
 
-    private static final String            BOT_SCORE_GAIN             = "botScoreGain";
-    private static final String            BOT_LUCK_GAIN              = "botLuckGain";
+    private static final String BOT_SCORE_GAIN = "botScoreGain";
+    private static final String BOT_LUCK_GAIN = "botLuckGain";
 
-    private static final String            SALT_PROPERTY              = "salt";
+    private static final String SALT_PROPERTY = "salt";
 
-    private static final DeblockProperties instance                   = new DeblockProperties();
+    private static final DeblockProperties instance = new DeblockProperties();
 
-    private Properties                     properties                 = new Properties();
+    private Properties properties = new Properties();
 
 
     public static DeblockProperties get() {
@@ -68,7 +68,8 @@ public class DeblockProperties {
 
         catch (InvalidPropertiesFormatException e) {
             throw logger.bug( e ).toError();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw logger.bug( e ).toError();
         }
     }
@@ -92,12 +93,12 @@ public class DeblockProperties {
 
     /**
      * The score gain is defined as follows:
-     * 
+     *
      * <p>
      * <i>The fraction of the bot's experience (days since registration) that boost the bot's maximum score for the day
      * by his base score.</i>
      * </p>
-     * 
+     *
      * <p>
      * Thus, a score gain of <code>0.5</code> means that a bot with a base score of <code>100</code> that has been
      * playing for <code>10</code> days can end his day with a score of
@@ -105,7 +106,7 @@ public class DeblockProperties {
      * been playing for <code>62</code> days (two months) can end his day with a score of
      * <code>500 + 62 * 0.5 * 500 = 500 + 15500 = 16000</code>.
      * </p>
-     * 
+     *
      * @return The amount of score bots gain per day.
      */
     public float getBotScoreGain() {
@@ -115,11 +116,11 @@ public class DeblockProperties {
 
     /**
      * The luck gain is defined as follows:
-     * 
+     *
      * <p>
      * <i>The amount with which to multiply the score gain of a bot when he has a lucky day.</i>
      * </p>
-     * 
+     *
      * @return The multiplier that is applied to a lucky bot's score gain.
      */
     public float getBotLuckGain() {

@@ -18,19 +18,19 @@ package com.lyndir.lhunath.deblock.util;
 /**
  * <h2>{@link DeblockConstants}<br>
  * <sub>Constants which are used throughout the application.</sub></h2>
- * 
+ *
  * <p>
  * <i>Nov 9, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public interface DeblockConstants {
 
-    String ERROR_HEADER          = "X-Deblock-Error";
-    String ERROR_MISSING_NAME    = "missing.name";
-    String ERROR_MISSING_PASS    = "missing.pass";
-    String ERROR_MISSING_CHECK   = "missing.check";
-    String ERROR_INCORRECT_PASS  = "incorrect.pass";
+    String ERROR_HEADER = "X-Deblock-Error";
+    String ERROR_MISSING_NAME = "missing.name";
+    String ERROR_MISSING_PASS = "missing.pass";
+    String ERROR_MISSING_CHECK = "missing.check";
+    String ERROR_INCORRECT_PASS = "incorrect.pass";
     String ERROR_INCORRECT_CHECK = "incorrect.check";
 }

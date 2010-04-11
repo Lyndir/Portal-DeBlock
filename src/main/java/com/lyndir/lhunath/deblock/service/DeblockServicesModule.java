@@ -23,11 +23,11 @@ import com.lyndir.lhunath.deblock.service.impl.ScoreServiceImpl;
 /**
  * <h2>{@link DeblockServicesModule}<br>
  * <sub>Guice module that defines the service bindings.</sub></h2>
- * 
+ *
  * <p>
  * <i>Jan 16, 2010</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class DeblockServicesModule extends AbstractModule {

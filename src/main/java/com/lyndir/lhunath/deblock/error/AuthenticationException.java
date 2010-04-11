@@ -21,15 +21,15 @@ import com.lyndir.lhunath.deblock.util.DeblockConstants;
 /**
  * <h2>{@link AuthenticationException}<br>
  * <sub>[in short] (TODO).</sub></h2>
- * 
+ *
  * <p>
  * [description / usage].
  * </p>
- * 
+ *
  * <p>
  * <i>Oct 29, 2009</i>
  * </p>
- * 
+ *
  * @author lhunath
  */
 public class AuthenticationException extends Exception {
@@ -41,18 +41,13 @@ public class AuthenticationException extends Exception {
 
     /**
      * Create a new {@link AuthenticationException} instance.
-     * 
-     * @param message
-     *            The problem description.
-     * @param cause
-     *            The exception that caused this problem. (optional)
-     * @param errorHeader
-     *            The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
-     *            exception.
-     * @param name
-     *            The name of the player that was trying to authenticate.
-     * @param password
-     *            The password that the player was trying to authenticate with.
+     *
+     * @param message     The problem description.
+     * @param cause       The exception that caused this problem. (optional)
+     * @param errorHeader The value of the {@link DeblockConstants#ERROR_HEADER} that should be set as a result of this
+     *                    exception.
+     * @param name        The name of the player that was trying to authenticate.
+     * @param password    The password that the player was trying to authenticate with.
      */
     public AuthenticationException(String message, Throwable cause, String errorHeader, String name, String password) {
 
