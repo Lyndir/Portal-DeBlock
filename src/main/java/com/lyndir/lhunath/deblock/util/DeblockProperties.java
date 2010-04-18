@@ -50,7 +50,7 @@ public class DeblockProperties {
 
     private static final DeblockProperties instance = new DeblockProperties();
 
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
 
     public static DeblockProperties get() {
@@ -74,7 +74,7 @@ public class DeblockProperties {
         }
     }
 
-    private String getProperty(String key) {
+    private String getProperty(final String key) {
 
         String value = properties.getProperty( key );
         if (value == null)

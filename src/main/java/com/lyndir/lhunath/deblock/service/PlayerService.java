@@ -40,7 +40,7 @@ public interface PlayerService {
     /**
      * @return All registered players.
      */
-    public List<PlayerEntity> getAllPlayers();
+    List<PlayerEntity> getAllPlayers();
 
     /**
      * Look up the {@link PlayerEntity} with the given name. Checks whether the player's password is equal to the given
@@ -60,7 +60,7 @@ public interface PlayerService {
      *                                 the given password is not equal ({@link #equals(Object)}) to the existing {@link PlayerEntity}'s
      *                                 password ( {@link PlayerEntity#getPassword()}).
      */
-    public PlayerEntity getPlayer(String name, String password)
+    PlayerEntity getPlayer(String name, String password)
             throws AuthenticationException;
 
     /**
@@ -68,5 +68,5 @@ public interface PlayerService {
      *
      * @param playerEntity The player whose updated data needs to be saved.
      */
-    public void save(PlayerEntity playerEntity);
+    void save(PlayerEntity playerEntity);
 }

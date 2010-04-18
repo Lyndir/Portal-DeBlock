@@ -13,5 +13,5 @@ package com.lyndir.lhunath.deblock.data;
 public enum GameMode {
 
     Classic,
-    Timed;
+    Timed
 }

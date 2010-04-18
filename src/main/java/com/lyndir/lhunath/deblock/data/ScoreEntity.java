@@ -20,7 +20,9 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.repackaged.com.google.common.base.Objects;
 import com.lyndir.lhunath.lib.system.logging.Logger;
+import com.lyndir.lhunath.lib.system.util.SafeObjects;
 
 
 /**
@@ -59,19 +61,22 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
 
     }
 
-    public ScoreEntity(PlayerEntity player) {
+    public ScoreEntity(final PlayerEntity player) {
 
         this();
 
         this.player = player;
     }
 
-    public ScoreEntity(PlayerEntity player, GameMode mode, int level, int score, Date achievedDate) {
+    public ScoreEntity(
+            final PlayerEntity player, final GameMode mode, final int level, final int score,
+            final Date achievedDate) {
 
         this( player );
 
         if (achievedDate == null)
-            throw logger.bug( "Date when score was achieved can't be unset." ).toError( IllegalArgumentException.class );
+            throw logger.bug( "Date when score was achieved can't be unset." )
+                    .toError( IllegalArgumentException.class );
 
         setMode( mode );
         setLevel( level );
@@ -107,7 +112,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     /**
      * @param score The score of this {@link ScoreEntity}.
      */
-    public void setScore(int score) {
+    public void setScore(final int score) {
 
         this.score = score;
     }
@@ -123,7 +128,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     /**
      * @param achievedDate The achievedDate of this {@link ScoreEntity}.
      */
-    public void setAchievedDate(Date achievedDate) {
+    public void setAchievedDate(final Date achievedDate) {
 
         this.achievedDate = achievedDate;
     }
@@ -139,7 +144,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     /**
      * @param mode The game mode in which the score was achieved.
      */
-    public void setMode(GameMode mode) {
+    public void setMode(final GameMode mode) {
 
         this.mode = mode;
     }
@@ -155,7 +160,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     /**
      * @param level The level in which the score was achieved.
      */
-    public void setLevel(int level) {
+    public void setLevel(final int level) {
 
         this.level = level;
     }
@@ -171,7 +176,7 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
     /**
      * @param id The id of this {@link ScoreEntity}.
      */
-    public void setId(Key id) {
+    public void setId(final Key id) {
 
         this.id = id;
     }
@@ -182,8 +187,27 @@ public class ScoreEntity implements Comparable<ScoreEntity> {
      * @see #getAchievedDate()
      */
     @Override
-    public int compareTo(ScoreEntity o) {
+    public int compareTo(final ScoreEntity o) {
 
         return score - o.score;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode( level, score, player );
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (obj == this)
+            return true;
+        if (obj == null || !getClass().isAssignableFrom( obj.getClass() ))
+            return false;
+
+        ScoreEntity o = (ScoreEntity) obj;
+        return SafeObjects.equal( level, o.level ) && SafeObjects.equal( score, o.score ) && SafeObjects
+                .equal( player, o.player );
     }
 }

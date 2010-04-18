@@ -34,9 +34,9 @@ import com.lyndir.lhunath.deblock.util.DeblockConstants;
  */
 public class AuthenticationException extends Exception {
 
-    private String name;
-    private String password;
-    private String errorHeader;
+    private final String name;
+    private final String password;
+    private final String errorHeader;
 
 
     /**
@@ -49,7 +49,9 @@ public class AuthenticationException extends Exception {
      * @param name        The name of the player that was trying to authenticate.
      * @param password    The password that the player was trying to authenticate with.
      */
-    public AuthenticationException(String message, Throwable cause, String errorHeader, String name, String password) {
+    public AuthenticationException(
+            final String message, final Throwable cause, final String errorHeader,
+            final String name, final String password) {
 
         super( message, cause );
 

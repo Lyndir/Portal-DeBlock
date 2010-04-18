@@ -50,12 +50,12 @@ public interface ScoreService {
      *
      * @return The {@link ScoreEntity} that records the given score for the given player.
      */
-    public ScoreEntity addScore(PlayerEntity player, GameMode mode, Integer level, Integer score, Date date);
+    ScoreEntity addScore(PlayerEntity player, GameMode mode, Integer level, Integer score, Date date);
 
     /**
      * @param playerEntity The player in whose context scores should be returned.
      *
      * @return A list of scores that revolve around the top score of the given player.
      */
-    public List<ScoreEntity> getScoresForPlayer(PlayerEntity playerEntity);
+    List<ScoreEntity> getScoresForPlayer(PlayerEntity playerEntity);
 }

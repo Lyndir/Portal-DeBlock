@@ -67,21 +67,25 @@ public abstract class CheckUtil {
     private static final Logger logger = Logger.get( CheckUtil.class );
 
 
-    public static void assertValidChecksum(String checksum, String name, GameMode mode, Integer level, Integer score,
-                                           Long achievedTimeStamp)
+    public static void assertValidChecksum(
+            final String checksum, final String name, final GameMode mode,
+            final Integer level, final Integer score, final Long achievedTimeStamp)
             throws ChecksumException {
 
         if (checksum == null || name == null || mode == null || level == null || score == null
             || achievedTimeStamp == null)
             throw logger.wrn(
                     "Missing checksum or checksum data (check %s, name %s, mode %s, level %s, score %s, date %s).", //
-                    checksum, name, mode, level, score, achievedTimeStamp ) //
+                    checksum, name, mode, level, score, achievedTimeStamp )
+                    //
                     .toError( ChecksumException.class, DeblockConstants.ERROR_MISSING_CHECK, name, mode, level,
                               score, checksum );
 
         String salt = DeblockProperties.get().getSalt();
-        String correctChecksum = Utils.getMD5( String.format( "%s:%s:%d:%d:%d:%d", //
-                                                              salt, name, mode.ordinal(), level, score, achievedTimeStamp ) );
+        String correctChecksum = Utils.getMD5( String.format(
+                "%s:%s:%d:%d:%d:%d", //
+                salt, name, mode.ordinal(), level, score,
+                achievedTimeStamp ) );
 
         if (!correctChecksum.equalsIgnoreCase( checksum ))
             throw logger.wrn( "Incorrect checksum." ) //

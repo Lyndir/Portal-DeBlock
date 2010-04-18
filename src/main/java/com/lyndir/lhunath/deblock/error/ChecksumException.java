@@ -35,11 +35,11 @@ import com.lyndir.lhunath.deblock.util.DeblockConstants;
  */
 public class ChecksumException extends AuthenticationException {
 
-    private String checksum;
-    private GameMode mode;
-    private Integer level;
-    private Integer score;
-    private Long achievedTimeStamp;
+    private final String checksum;
+    private final GameMode mode;
+    private final Integer level;
+    private final Integer score;
+    private final Long achievedTimeStamp;
 
 
     /**
@@ -56,8 +56,10 @@ public class ChecksumException extends AuthenticationException {
      * @param score             The score that the player had achieved.
      * @param achievedTimeStamp The time in milliseconds since the UNIX epoch.
      */
-    public ChecksumException(String message, Throwable cause, String errorHeader, String checksum, String name,
-                             GameMode mode, Integer level, Integer score, Long achievedTimeStamp) {
+    public ChecksumException(
+            final String message, final Throwable cause, final String errorHeader,
+            final String checksum, final String name, final GameMode mode, final Integer level,
+            final Integer score, final Long achievedTimeStamp) {
 
         super( message, cause, errorHeader, name, null );
 

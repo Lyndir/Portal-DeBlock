@@ -47,11 +47,11 @@ public class ScoreServiceImpl implements ScoreService {
     private static final long FUTURE_SCORE_TIME_FRAME_MS = 5 /* min */ * 60 /* s */ * 1000 /* ms */;
     private static final int SEND_SCORES_ABOVE = 3;
     private static final int SEND_SCORES_BELOW = 3;
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
 
     @Inject
-    public ScoreServiceImpl(PlayerService playerService) {
+    public ScoreServiceImpl(final PlayerService playerService) {
 
         this.playerService = playerService;
     }
@@ -60,7 +60,9 @@ public class ScoreServiceImpl implements ScoreService {
      * {@inheritDoc}
      */
     @Override
-    public ScoreEntity addScore(PlayerEntity player, GameMode mode, Integer level, Integer score, Date date) {
+    public ScoreEntity addScore(
+            final PlayerEntity player, final GameMode mode, final Integer level,
+            final Integer score, final Date date) {
 
         Date now = new Date();
         if (score == null)
@@ -81,40 +83,40 @@ public class ScoreServiceImpl implements ScoreService {
      * {@inheritDoc}
      */
     @Override
-    public List<ScoreEntity> getScoresForPlayer(PlayerEntity focussedPlayerEntity) {
+    public List<ScoreEntity> getScoresForPlayer(final PlayerEntity playerEntity) {
 
         TreeSet<ScoreEntity> allScores = new TreeSet<ScoreEntity>();
-        ScoreEntity focussedScore = null;
-        for (PlayerEntity playerEntity : playerService.getAllPlayers()) {
-            ScoreEntity scoreEntity = playerEntity.getScores().last();
+        ScoreEntity focusedScore = null;
+        for (final PlayerEntity aPlayerEntity : playerService.getAllPlayers()) {
+            ScoreEntity scoreEntity = aPlayerEntity.getScores().last();
             allScores.add( scoreEntity );
-            if (playerEntity.equals( focussedPlayerEntity ))
-                focussedScore = scoreEntity;
+            if (aPlayerEntity.equals( playerEntity ))
+                focusedScore = scoreEntity;
         }
 
-        LinkedHashMap<ScoreEntity, ?> focussedScores = new LinkedHashMap<ScoreEntity, Object>( SEND_SCORES_ABOVE
-                                                                                               + SEND_SCORES_BELOW + 1 ) {
+        LinkedHashMap<ScoreEntity, ?> focusedScores = new LinkedHashMap<ScoreEntity, Object>(
+                SEND_SCORES_ABOVE + SEND_SCORES_BELOW + 1 ) {
 
             @Override
-            protected boolean removeEldestEntry(Map.Entry<ScoreEntity, Object> eldest) {
+            protected boolean removeEldestEntry(final Map.Entry<ScoreEntity, Object> eldest) {
 
                 return size() > SEND_SCORES_ABOVE + SEND_SCORES_BELOW + 1;
             }
         };
 
-        boolean foundFocussedScore = false;
+        boolean foundFocusedScore = false;
         int remainingScores = SEND_SCORES_ABOVE;
-        for (ScoreEntity scoreEntity : allScores) {
-            focussedScores.put( scoreEntity, null );
+        for (final ScoreEntity scoreEntity : allScores) {
+            focusedScores.put( scoreEntity, null );
 
-            if (foundFocussedScore) {
+            if (foundFocusedScore) {
                 if (--remainingScores <= 0)
                     break;
 
-            } else if (scoreEntity.equals( focussedScore ))
-                foundFocussedScore = true;
+            } else if (scoreEntity.equals( focusedScore ))
+                foundFocusedScore = true;
         }
 
-        return ImmutableList.copyOf( focussedScores.keySet() );
+        return ImmutableList.copyOf( focusedScores.keySet() );
     }
 }

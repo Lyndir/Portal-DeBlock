@@ -53,7 +53,7 @@ public class DeblockServletContextListener extends AppsServletContextListener {
      * {@inheritDoc}
      */
     @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
+    public void contextInitialized(final ServletContextEvent servletContextEvent) {
 
         super.contextInitialized( servletContextEvent );
 
@@ -76,7 +76,8 @@ public class DeblockServletContextListener extends AppsServletContextListener {
                                   new Dependency(
                                           "Cocos2d-iPhone (0.8.2-rc1)",
                                           "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
-                                          "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
+                                          "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ),
+                                  //
                                   new Dependency( "iLibs", "http://github.com/lhunath/iLibs",
                                                   "http://github.com/lhunath/iLibs/downloads" ) ), //
                 new Date( 1265067646 * 1000L ), null/* TODO: YouTube video for 1.0 */, //
@@ -104,7 +105,8 @@ public class DeblockServletContextListener extends AppsServletContextListener {
                                   new Dependency(
                                           "Cocos2d-iPhone (0.8.2-rc1)",
                                           "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
-                                          "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
+                                          "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ),
+                                  //
                                   new Dependency( "iLibs", "http://github.com/lhunath/iLibs",
                                                   "http://github.com/lhunath/iLibs/downloads" ) ), //
                 new Date( 1266963403 * 1000L ), null/* TODO: YouTube video for 1.0 */, //
@@ -132,7 +134,7 @@ public class DeblockServletContextListener extends AppsServletContextListener {
     }
 
 
-    private class DeblockServletModule extends ServletModule {
+    private static class DeblockServletModule extends ServletModule {
 
         DeblockServletModule() {
 

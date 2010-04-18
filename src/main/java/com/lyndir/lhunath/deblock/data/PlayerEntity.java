@@ -24,7 +24,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.repackaged.com.google.common.base.Objects;
 import com.lyndir.lhunath.lib.system.logging.Logger;
+import com.lyndir.lhunath.lib.system.util.SafeObjects;
 
 
 /**
@@ -43,7 +45,8 @@ import com.lyndir.lhunath.lib.system.logging.Logger;
  */
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
-@NamedQueries({@NamedQuery(name = findAll, query = "SELECT p FROM PlayerEntity p"),
+@NamedQueries({
+        @NamedQuery(name = findAll, query = "SELECT p FROM PlayerEntity p"),
         @NamedQuery(name = findByName, query = "SELECT p FROM PlayerEntity p WHERE p.name = :name")})
 public class PlayerEntity implements Comparable<PlayerEntity> {
 
@@ -71,14 +74,14 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
         setScores( new TreeSet<ScoreEntity>() );
     }
 
-    public PlayerEntity(String name) {
+    public PlayerEntity(final String name) {
 
         this();
 
         setName( name );
     }
 
-    public PlayerEntity(String name, String password) {
+    public PlayerEntity(final String name, final String password) {
 
         this();
 
@@ -97,7 +100,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * @param id The id of this {@link PlayerEntity}.
      */
-    public void setId(Key id) {
+    public void setId(final Key id) {
 
         this.id = id;
     }
@@ -113,7 +116,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * @param name The name of this {@link PlayerEntity}.
      */
-    public void setName(String name) {
+    public void setName(final String name) {
 
         if (name == null || name.isEmpty())
             throw logger.bug( "Player name can't be empty." ).toError( IllegalArgumentException.class );
@@ -132,7 +135,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * @param password The password of this {@link PlayerEntity}.
      */
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
 
         if (password == null || password.isEmpty())
             throw logger.bug( "Password can't be empty." ).toError( IllegalArgumentException.class );
@@ -151,7 +154,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * @param registered The registered of this {@link PlayerEntity}.
      */
-    public void setRegistered(Date registered) {
+    public void setRegistered(final Date registered) {
 
         this.registered = registered;
     }
@@ -169,7 +172,7 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
     /**
      * @param scores The scores of this {@link PlayerEntity}.
      */
-    public void setScores(SortedSet<ScoreEntity> scores) {
+    public void setScores(final SortedSet<ScoreEntity> scores) {
 
         this.scores = scores;
     }
@@ -178,8 +181,26 @@ public class PlayerEntity implements Comparable<PlayerEntity> {
      * {@inheritDoc}
      */
     @Override
-    public int compareTo(PlayerEntity o) {
+    public int compareTo(final PlayerEntity o) {
 
         return registered.compareTo( o.registered );
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (obj == this)
+            return true;
+        if (obj == null || !getClass().isAssignableFrom( obj.getClass() ))
+            return false;
+
+        PlayerEntity o = (PlayerEntity) obj;
+        return SafeObjects.equal( name, o.name ) && SafeObjects.equal( password, o.password );
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode( name, password );
     }
 }

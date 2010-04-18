@@ -36,12 +36,12 @@ public class ScoreServlet extends HttpServlet {
 
     private static final Logger logger = Logger.get( ScoreServlet.class );
 
-    private PlayerService playerService;
-    private ScoreService scoreService;
+    private final PlayerService playerService;
+    private final ScoreService scoreService;
 
 
     @Inject
-    public ScoreServlet(PlayerService playerService, ScoreService scoreService) {
+    public ScoreServlet(final PlayerService playerService, final ScoreService scoreService) {
 
         this.playerService = playerService;
         this.scoreService = scoreService;
@@ -53,7 +53,7 @@ public class ScoreServlet extends HttpServlet {
      * {@inheritDoc}
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType( "text/plain;charset=UTF-8" );
@@ -91,7 +91,7 @@ public class ScoreServlet extends HttpServlet {
      * {@inheritDoc}
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType( "text/plain;charset=UTF-8" );
@@ -149,10 +149,10 @@ public class ScoreServlet extends HttpServlet {
      * @param pass     The password the player who's requesting the scores is authenticating himself with.
      * @param response Where to write the resulting scores to.
      *
-     * @throws IOException
+     * @throws IOException             Writing to the response failed.
      * @throws AuthenticationException When the pass is not valid for the name.
      */
-    private void writeScores(String name, String pass, HttpServletResponse response)
+    private void writeScores(final String name, final String pass, final HttpServletResponse response)
             throws IOException, AuthenticationException {
 
         // Output all known scores.
@@ -161,7 +161,7 @@ public class ScoreServlet extends HttpServlet {
             // Only put scores in response when we know the player in whose context to display the scores.
             PlayerEntity playerEntity = playerService.getPlayer( name, pass );
 
-            for (ScoreEntity scoreEntity : scoreService.getScoresForPlayer( playerEntity )) {
+            for (final ScoreEntity scoreEntity : scoreService.getScoresForPlayer( playerEntity )) {
 
                 json.key( scoreEntity.getPlayer().getName() );
                 json.object();
@@ -198,8 +198,9 @@ public class ScoreServlet extends HttpServlet {
      *
      * @throws AuthenticationException When the pass is not valid for the name.
      */
-    private void recordScore(String name, String pass, String check, GameMode mode, Integer level, Integer score,
-                             Date date)
+    private void recordScore(
+            final String name, final String pass, final String check, final GameMode mode,
+            final Integer level, final Integer score, final Date date)
             throws AuthenticationException {
 
         // Validate name and password.

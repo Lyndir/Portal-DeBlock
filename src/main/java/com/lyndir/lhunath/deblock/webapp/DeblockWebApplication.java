@@ -58,7 +58,7 @@ public class DeblockWebApplication extends AppsWebApplication {
      * {@inheritDoc}
      */
     @Override
-    public Session newSession(Request request, Response response) {
+    public Session newSession(final Request request, final Response response) {
 
         return ((AppsSession) super.newSession( request, response )).setStyleURL( "css/deblock.css" );
     }

@@ -47,10 +47,6 @@ public class PlayerServiceImpl implements PlayerService {
     private static final Logger logger = Logger.get( PlayerServiceImpl.class );
 
 
-    public PlayerServiceImpl() {
-
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -67,7 +63,7 @@ public class PlayerServiceImpl implements PlayerService {
      * {@inheritDoc}
      */
     @Override
-    public PlayerEntity getPlayer(String name, String password)
+    public PlayerEntity getPlayer(final String name, final String password)
             throws AuthenticationException {
 
         // Check whether the input is valid.
@@ -84,7 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             playerEntity = (PlayerEntity) playerQuery.getSingleResult();
         }
-        catch (NoResultException e) {
+        catch (NoResultException ignored) {
         }
 
         // Check if the player is already registered. If not, just register him now with the given name and password.
@@ -103,7 +99,7 @@ public class PlayerServiceImpl implements PlayerService {
      * {@inheritDoc}
      */
     @Override
-    public void save(PlayerEntity playerEntity) {
+    public void save(final PlayerEntity playerEntity) {
 
         EntityTransaction transaction = EMF.getEm().getTransaction();
         try {

@@ -27,17 +27,17 @@ public enum Bot {
     CRAIS( "Crais", 382, 0.3f ),
     SCORPIUS( "Scorpius", 3790, 0.1f ),;
 
-    private String name;
-    private int baseScore;
-    private float luck;
+    private final String name;
+    private final int baseScore;
+    private final float luck;
 
 
-    Bot(String name, int baseScore, float luck) {
+    Bot(final String name, final int baseScore, final float luck) {
 
         if (luck > 1 || luck < 0)
-            throw new IllegalArgumentException( String.format(
-                    "Bot %s was given a luck value of %d.  Luck must be in the range 0..1.", //
-                    name, luck ) );
+            throw new IllegalArgumentException(
+                    String.format( "Bot %s was given a luck value of %0.2f.  Luck must be in the range 0..1.", //
+                                   name, luck ) );
 
         this.name = name;
         this.baseScore = baseScore;
