@@ -1,9 +1,22 @@
+# Compiled objects.
+target
+
+# OS-Specific junk.
 .DS_Store
-*.jks
-*.key
-/.classpath
-/.project
-/.settings
-/eclipse
-/target
-/src/main/resources/deblock-secret.xml
+
+# Eclipse IDE
+.classpath
+.project
+.settings
+.refactorings
+
+# IntelliJ IDEA IDE
+/.idea
+*.iml
+
+# Netbeans IDE
+/build.xml
+/build
+/dist
+/manifest.mf
+/nbproject

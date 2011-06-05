@@ -15,8 +15,8 @@
  */
 package com.lyndir.lhunath.deblock.webapp;
 
-import com.lyndir.lhunath.apps.webapp.AppsSession;
-import com.lyndir.lhunath.apps.webapp.AppsWebApplication;
+import com.lyndir.lhunath.portal.apps.webapp.AppsSession;
+import com.lyndir.lhunath.portal.apps.webapp.AppsWebApplication;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
@@ -25,16 +25,11 @@ import org.apache.wicket.session.ISessionStore;
 
 
 /**
- * <h2>{@link DeblockWebApplication}<br>
- * <sub>[in short] (TODO).</sub></h2>
+ * <h2>{@link DeblockWebApplication}<br> <sub>[in short] (TODO).</sub></h2>
  *
- * <p>
- * [description / usage].
- * </p>
+ * <p> [description / usage]. </p>
  *
- * <p>
- * <i>Jan 16, 2010</i>
- * </p>
+ * <p> <i>Jan 16, 2010</i> </p>
  *
  * @author lhunath
  */

@@ -1,227 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- PROJECT METADATA -->
     <parent>
-        <groupId>com.lyndir.lhunath</groupId>
-        <artifactId>lyndir</artifactId>
-        <version>SNAPSHOT</version>
+        <groupId>com.lyndir.lhunath.portal</groupId>
+        <artifactId>portal</artifactId>
+        <version>GIT-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.lyndir.lhunath.deblock.webapp</groupId>
-    <artifactId>deblock-web</artifactId>
-    <version>1</version>
+    <groupId>com.lyndir.lhunath.portal</groupId>
+    <artifactId>portal-apps-deblock</artifactId>
+    <version>GIT-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Deblock: The Website</name>
+    <name>Lyndir Portal: Deblock</name>
+    <description>The website of the Deblock iPhone game.</description>
     <url>http://deblock.lyndir.com</url>
     <inceptionYear>2009</inceptionYear>
-    <description>
-        The website of the Deblock iPhone game.
-    </description>
 
-    <organization>
-        <name>Lhunath</name>
-        <url>http://www.lhunath.com</url>
-    </organization>
 
     <!-- CODE MANAGEMENT -->
     <scm>
-        <url>http://codaset.com/lhunath/Deblock</url>
-        <connection>${scm.git.pubbase}/Deblock.git</connection>
-        <developerConnection>${scm.git.devbase}/Deblock.git</developerConnection>
+        <url>${scm.github.webbase}/Deblock</url>
+        <connection>${scm.github.pubbase}/Deblock.git</connection>
+        <developerConnection>${scm.github.devbase}/Deblock.git</developerConnection>
     </scm>
     <issueManagement>
         <system>Codaset</system>
-        <url>http://codaset.com/lhunath/Deblock/tickets</url>
+        <url>${scm.codaset.webbase}/Deblock/tickets</url>
     </issueManagement>
 
 
     <!-- BUILD CONFIGURATION -->
     <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                    <webResources>
-                        <resource>
-                            <directory>
-                                ${basedir}/src/main/webapp/WEB-INF
-                            </directory>
-                            <targetPath>WEB-INF</targetPath>
-                            <filtering>true</filtering>
-                        </resource>
-                        <resource>
-                            <filtering>false</filtering>
-                            <directory>${basedir}/src/main/java
-                            </directory>
-                            <targetPath>WEB-INF/classes</targetPath>
-                            <includes>
-                                <include>**/*.html</include>
-                                <include>**/*.properties</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/*.java</exclude>
-                            </excludes>
-                        </resource>
-                    </webResources>
                     <overlays>
                         <overlay>
-                            <groupId>com.lyndir.lhunath.apps</groupId>
-                            <artifactId>apps-webapp</artifactId>
+                            <groupId>com.lyndir.lhunath.portal</groupId>
+                            <artifactId>portal-apps</artifactId>
                             <excludes>
                                 <exclude>WEB-INF/web.xml</exclude>
+                                <exclude>WEB-INF/lib/*</exclude>
                             </excludes>
                         </overlay>
                     </overlays>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>maven-datanucleus-plugin</artifactId>
-                <configuration>
-                    <mappingIncludes>**/data/**/*.class</mappingIncludes>
-                    <verbose>true</verbose>
-                    <enhancerName>ASM</enhancerName>
-                    <api>JPA</api>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>enhance</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>javax.jdo</groupId>
-                        <artifactId>jdo2-api</artifactId>
-                        <version>2.3-eb</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>6.1.15</version>
-                <configuration>
-                    <contextPath>/</contextPath>
-                    <scanIntervalSeconds>2</scanIntervalSeconds>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>logback.configurationFile</name>
-                            <value>${basedir}/target/classes/logback.xml</value>
-                        </systemProperty>
-                    </systemProperties>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>logback-classic</artifactId>
-                        <version>0.9.15</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
+
 
     <!-- DEPENDENCY MANAGEMENT -->
     <dependencies>
 
-        <!-- JLIBS -->
+        <!-- Apps -->
         <dependency>
-            <groupId>com.lyndir.lhunath.jlibs</groupId>
-            <artifactId>system</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-
-        <!-- APPS -->
-        <dependency>
-            <groupId>com.lyndir.lhunath.apps</groupId>
-            <artifactId>apps-domain</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lyndir.lhunath.apps</groupId>
-            <artifactId>apps-webapp</artifactId>
-            <version>SNAPSHOT</version>
+            <groupId>com.lyndir.lhunath.portal</groupId>
+            <artifactId>portal-apps</artifactId>
+            <version>GIT-SNAPSHOT</version>
             <type>war</type>
         </dependency>
-
-        <!-- GOOGLE APP ENGINE -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.appengine.orm</groupId>
-            <artifactId>datanucleus-appengine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_3.0_spec</artifactId>
-        </dependency>
-        <!-- TODO: REMOVE WHEN GOOGLE'S MAVEN REPO UPDATES ITS DATANUCLEUS-APPENGINE ARTIFACT. -->
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_3.0_spec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo2-api</artifactId>
-        </dependency>
-
-        <!-- EXTERNAL DEPENDENCIES -->
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <classifier>jdk15</classifier>
+            <groupId>com.lyndir.lhunath.portal</groupId>
+            <artifactId>portal-apps</artifactId>
+            <version>GIT-SNAPSHOT</version>
+            <type>warpath</type>
         </dependency>
 
     </dependencies>
