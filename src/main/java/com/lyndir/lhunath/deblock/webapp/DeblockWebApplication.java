@@ -15,8 +15,11 @@
  */
 package com.lyndir.lhunath.deblock.webapp;
 
+import com.lyndir.lhunath.opal.system.logging.exception.InternalInconsistencyException;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.lhunath.portal.apps.webapp.AppsSession;
 import com.lyndir.lhunath.portal.apps.webapp.AppsWebApplication;
+import com.lyndir.lhunath.portal.webapp.model.StripItem;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
@@ -36,11 +39,13 @@ import org.apache.wicket.session.ISessionStore;
 public class DeblockWebApplication extends AppsWebApplication {
 
     @Override
-    protected void init() {
+    public StripItem getActiveItem() {
 
-        getResourceSettings().setResourcePollFrequency( null );
+        for (final StripItem stripItem : getStripItems().getObject())
+            if (ObjectUtils.isEqual( stripItem.getLink(), "http://deblock.lyndir.com" ))
+                return stripItem;
 
-        super.init();
+        throw new InternalInconsistencyException( "Active strip not found." );
     }
 
     @Override

@@ -44,9 +44,9 @@ public class DeblockGuiceContext extends PortalGuiceContext {
         super.contextInitialized( servletContextEvent );
 
         // Register our application and its versions.
-        App deblock = new App( "lhunath", "DeBlock", "deblock", new CodaSetSourceProvider(), new YouTrackIssueTracker(), "UA-90535-9" );
+        App deblock = new App( "lhunath", "DeBlock", "deblock", new CodaSetSourceProvider(), new YouTrackIssueTracker(), "UA-90535-11" );
         deblock.setIssueTrackerName( "DBL" );
-        String description = "<p class='short'>DeBlock is a block destruction game in the style of Bejuweled or Destruct-o-Block, " //
+        String description = "<p class='short'>DeBlock is a block destruction game in the style of Bejeweled or Destruct-o-Block, " //
                              + "but unique altogether.</p>" //
                              + "<p>Each level is a field filled with blocks of different colors.<br />" //
                              + "The goal is to clear the field by destroying blocks that are sitting next to blocks of the same color.  " //
@@ -65,8 +65,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                                                   "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
                                                   "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
                                           new Dependency(
-                                                  "iLibs", "http://github.com/lhunath/iLibs",
-                                                  "http://github.com/lhunath/iLibs/downloads" ) ), //
+                                                  "iLibs", "http://github.com/Lyndir/iLibs",
+                                                  "http://github.com/Lyndir/iLibs/downloads" ) ), //
                         new Date( 1265067646 * 1000L ), null/* TODO: YouTube video for 1.0 */, //
                         "Spellbinding levels", //
                         "Exciting for all ages", //
@@ -85,8 +85,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                                                   "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
                                                   "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
                                           new Dependency(
-                                                  "iLibs", "http://github.com/lhunath/iLibs",
-                                                  "http://github.com/lhunath/iLibs/downloads" ) ), //
+                                                  "iLibs", "http://github.com/Lyndir/iLibs",
+                                                  "http://github.com/Lyndir/iLibs/downloads" ) ), //
                         new Date( 1266963403 * 1000L ), null/* TODO: YouTube video for 1.1 */, //
                         "Scoreboard now shows and sorts by score ratio", //
                         "Improved scoreboard reloading" //

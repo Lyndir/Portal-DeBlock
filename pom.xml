@@ -16,7 +16,7 @@
     <version>GIT-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Lyndir Portal: Deblock</name>
+    <name>Lyndir Portal: DeBlock</name>
     <description>The website of the Deblock iPhone game.</description>
     <url>http://deblock.lyndir.com</url>
     <inceptionYear>2009</inceptionYear>
