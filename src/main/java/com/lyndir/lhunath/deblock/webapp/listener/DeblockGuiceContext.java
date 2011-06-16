@@ -44,7 +44,7 @@ public class DeblockGuiceContext extends PortalGuiceContext {
         super.contextInitialized( servletContextEvent );
 
         // Register our application and its versions.
-        App deblock = new App( "lhunath", "DeBlock", "deblock", new CodaSetSourceProvider(), new YouTrackIssueTracker(), "UA-90535-11" );
+        App deblock = new App( "Lyndir", "DeBlock", "deblock", new CodaSetSourceProvider(), new YouTrackIssueTracker(), "UA-90535-11" );
         deblock.setIssueTrackerName( "DBL" );
         String description = "<p class='short'>DeBlock is a block destruction game in the style of Bejeweled or Destruct-o-Block, " //
                              + "but unique altogether.</p>" //
@@ -97,8 +97,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                         "“Mind-meltingly addictive.”", description, //
                         ImmutableList.of( //
                                           new Dependency(
-                                                  "cocos2d-iphone (0.99.5-rc1)", "https://github.com/Lyndir/Cocos2D-iPhone/tree/c20c041",
-                                                  "https://github.com/Lyndir/Cocos2D-iPhone/zipball/c20c041" ), //
+                                                  "cocos2d-iphone (0.99.5-rc1)", "https://github.com/lhunath/Cocos2D-iPhone/tree/c20c041",
+                                                  "https://github.com/lhunath/Cocos2D-iPhone/zipball/c20c041" ), //
                                           new Dependency(
                                                   "iLibs", "http://github.com/Lyndir/iLibs/tree/8431930",
                                                   "http://github.com/Lyndir/iLibs/downloads/zipball/8431930" ) ), //
