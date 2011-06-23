@@ -65,8 +65,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                                                   "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
                                                   "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
                                           new Dependency(
-                                                  "iLibs", "http://github.com/Lyndir/iLibs",
-                                                  "http://github.com/Lyndir/iLibs/downloads" ) ), //
+                                                  "Pearl", "http://github.com/Lyndir/Pearl",
+                                                  "http://github.com/Lyndir/Pearl/downloads" ) ), //
                         new Date( 1265067646 * 1000L ), null/* TODO: YouTube video for 1.0 */, //
                         "Spellbinding levels", //
                         "Exciting for all ages", //
@@ -85,8 +85,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                                                   "http://code.google.com/p/cocos2d-iphone/source/browse/#svn/tags/release-0.8.2-rc1",
                                                   "http://cocos2d-iphone.googlecode.com/files/cocos2d-iphone-0.8.2-rc1.tar.gz" ), //
                                           new Dependency(
-                                                  "iLibs", "http://github.com/Lyndir/iLibs",
-                                                  "http://github.com/Lyndir/iLibs/downloads" ) ), //
+                                                  "Pearl", "http://github.com/Lyndir/Pearl",
+                                                  "http://github.com/Lyndir/Pearl/downloads" ) ), //
                         new Date( 1266963403 * 1000L ), null/* TODO: YouTube video for 1.1 */, //
                         "Scoreboard now shows and sorts by score ratio", //
                         "Improved scoreboard reloading" //
@@ -100,8 +100,8 @@ public class DeblockGuiceContext extends PortalGuiceContext {
                                                   "cocos2d-iphone (0.99.5-rc1)", "https://github.com/lhunath/Cocos2D-iPhone/tree/c20c041",
                                                   "https://github.com/lhunath/Cocos2D-iPhone/zipball/c20c041" ), //
                                           new Dependency(
-                                                  "iLibs", "http://github.com/Lyndir/iLibs/tree/8431930",
-                                                  "http://github.com/Lyndir/iLibs/downloads/zipball/8431930" ) ), //
+                                                  "Pearl", "http://github.com/Lyndir/Pearl/tree/8431930",
+                                                  "http://github.com/Lyndir/Pearl/downloads/zipball/8431930" ) ), //
                         new Date( 1304197596 * 1000L ), null/* TODO: YouTube video for 1.2 */, //
                         "Game Center integration: Scoring and user-specific level progress.", //
                         "Kids mode: No HUD to hit, no scoring or leveling, doesn't reset your own progress.", //
