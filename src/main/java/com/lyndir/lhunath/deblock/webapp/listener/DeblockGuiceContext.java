@@ -44,7 +44,7 @@ public class DeblockGuiceContext extends PortalGuiceContext {
         super.contextInitialized( servletContextEvent );
 
         // Register our application and its versions.
-        App deblock = new App( "Lyndir", "DeBlock", "deblock", new CodaSetSourceProvider(), new YouTrackIssueTracker(), "UA-90535-11" );
+        App deblock = new App( "Lyndir", "DeBlock", "DeBlock", new GitHubSourceProvider(), new YouTrackIssueTracker(), "UA-90535-11" );
         deblock.setIssueTrackerName( "DBL" );
         String description = "<p class='short'>DeBlock is a block destruction game in the style of Bejeweled or Destruct-o-Block, " //
                              + "but unique altogether.</p>" //
